@@ -6,6 +6,26 @@
         {% endfor %}
         <hr>
         <h3>Prix</h3>
+        <div class="radio">
+            <label><input type="radio" name="price">0 - 20</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="price">20 - 80</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="price">80 - 100</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="price">100 - plus</label>
+        </div>
+        <hr>
+        <h3>Type</h3>
+        <select name="type" class="form-control">
+            <option value="None">--------</option>
+            {% for type in types %}
+                <option value="{{ type.id }}">{{ type.label }}</option>
+            {% endfor %}
+        </select>
     </div>
 </div>
 
