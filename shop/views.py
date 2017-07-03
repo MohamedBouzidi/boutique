@@ -13,8 +13,8 @@ from django.contrib.auth.models import User
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from .models import Boutique, Product, BusinessUser, Categorie
-from .forms import BoutiqueForm, ProductForm
+from .models import Boutique, Product, BusinessUser, Categorie, Picture
+from .forms import BoutiqueForm, ProductForm, PictureForm
 
 
 @method_decorator(login_required, name='dispatch')
@@ -79,6 +79,26 @@ def product_dublicate_view(request, boutique_id, pk):
 class ProductDetailView(DetailView):
     model = Product
     context_object_name = 'product'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetailView, self).get_context_data(**kwargs)
+        context['pictures'] = self.get_object().picture_set.all()
+        return context
+
+
+@method_decorator(login_required, name='dispatch')
+class ProductPictureCreateView(CreateView):
+    model = Picture
+    form_class = PictureForm
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.product = Product.objects.get(pk=self.kwargs['product_id'])
+        obj.save()
+        return super(ProductPictureCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('detail_product', kwargs={'boutique_id': self.kwargs['boutique_id'], 'pk': self.kwargs['product_id']})
 
 
 @method_decorator(login_required, name='dispatch')

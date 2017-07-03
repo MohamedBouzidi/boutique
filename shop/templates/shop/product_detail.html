@@ -4,6 +4,18 @@
     <div class="row">
         <div class="col-md-4">
             <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive">
+            <div class="extra-images">
+                <div class="row">
+                {% for picture in pictures %}
+                    <div class="col-md-4">
+                        <img src="{{ MEDIA_URL }}{{ picture.name.url }}" alt="{{ product.name }}" class="img-responsive">
+                    </div>        
+                {% endfor %}
+                </div>
+                {% if product.boutique.owner == request.user %}
+                    <a href="{% url 'new_product_picture' product.boutique.id product.id %}" class="add-extra-picture" data-product-id="{{ product.id }}">&plus;</a>
+                {% endif %}
+            </div>
         </div>
         <div class="col-md-8">
             <h2>{{ product.name }}</h2>
@@ -11,4 +23,45 @@
             <p>{{ product.description }}</p>
         </div>
     </div>
+
+    <script>
+        // $(".add-extra-picture").on('click', function (e) {
+        //     e.preventDefault();
+        //     $.ajaxSetup({ 
+        //          beforeSend: function(xhr, settings) {
+        //              function getCookie(name) {
+        //                  var cookieValue = null;
+        //                  if (document.cookie && document.cookie != '') {
+        //                      var cookies = document.cookie.split(';');
+        //                      for (var i = 0; i < cookies.length; i++) {
+        //                          var cookie = jQuery.trim(cookies[i]);
+        //                          // Does this cookie string begin with the name we want?
+        //                          if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        //                              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        //                              break;
+        //                          }
+        //                      }
+        //                  }
+        //                  return cookieValue;
+        //              }
+        //              if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        //                  // Only send the token to relative URLs i.e. locally.
+        //                  xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        //              }
+        //          } 
+        //     });
+        //     var $this = $(this);
+        //     var productId = $this.attr("data-product-id");
+        //     $.ajax({
+        //         url: "ajax/" + productId + "/picture/new",
+        //         type: "POST",
+        //         data: {
+
+        //         },
+        //         success: function (data) {
+        //             console.log(data);
+        //         }
+        //     })
+        // }); 
+    </script>
 {% endblock %}

@@ -1,3 +1,7 @@
+#main {
+    padding-top: 70px;
+}
+
 .img-responsive {
 	width: 100%;
 	height: auto;
@@ -33,4 +37,18 @@
     text-decoration: none;
     color: steelblue;
     cursor: pointer;
+}
+
+.add-extra-picture {
+    display: block;
+    background: #eee;
+    padding: 50px;
+    width: 110px;
+    height: auto;
+    font-size: 1.9em;
+    color: black;
+}
+
+.add-extra-picture:hover {
+    text-decoration: none;
 }

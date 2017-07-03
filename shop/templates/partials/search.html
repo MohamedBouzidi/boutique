@@ -1,0 +1,11 @@
+<div class="panel panel-default sidebar">
+    <div class="panel-body">
+        <h3>Tous les catégories</h3>
+        {% for categorie in categories %}
+            <a href="#" class="categorie" data-categorie-id="{{ categorie.id }}">{{ categorie.label }}</a>
+        {% endfor %}
+        <hr>
+        <h3>Prix</h3>
+    </div>
+</div>
+

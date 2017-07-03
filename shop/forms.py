@@ -1,5 +1,5 @@
 from django.forms import ModelForm, TextInput, Textarea, PasswordInput, FileInput, Select, CheckboxInput
-from .models import Boutique, Product, Categorie
+from .models import Boutique, Product, Categorie, Picture
 
 
 class BoutiqueForm(ModelForm):
@@ -29,4 +29,13 @@ class ProductForm(ModelForm):
             'quantite': TextInput(attrs={'class': 'form-control'}),
             'categorie': Select(attrs={'class': 'form-control'}),
             'type': Select(attrs={'class': 'form-control'}),
+        }
+
+
+class PictureForm(ModelForm):
+    class Meta:
+        model = Picture
+        fields = ['name']
+        widgets = {
+            'name': FileInput(attrs={'class': 'form-control'})
         }

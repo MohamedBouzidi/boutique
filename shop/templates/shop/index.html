@@ -4,7 +4,9 @@
     {% if products %}
         <div class="row">
             <div class="col-md-4">
-                {% include 'partials/search.html' with categories=categories %}
+                <div class="affix">
+                    {% include 'partials/search.html' with categories=categories %}
+                </div>
             </div>
             <div class="col-md-8" id="product_list">
                 <div class="row">
@@ -20,19 +22,24 @@
                 </div>
                 <div class="row">
                     {% if is_paginated %}
-                        <div class="pagination">
-                            <span class="page-links">
-                                {% if page_obj.has_previous  %}
-                                    <a href="{% url 'index' %}?page={{ page_obj.previous_page_number }}">previous</a>
-                                {% endif %}
-                                <span class="page-current">
-                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                                </span>
-                                {% if page_obj.has_next %}
+                        <ul class="pagination">
+                            <li><a href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                        </ul>
+                        <ul class="pagination">
+                            {% if page_obj.has_previous  %}
+                                <li>
+                                <a href="{% url 'index' %}?page={{ page_obj.previous_page_number }}">previous</a>                                    
+                                </li>
+                            {% endif %}
+                            {% for page in page_obj.paginator.page_range %}
+                                <li><a href="{% url 'index' %}?page={{ page }}">{{ page }}</a></li>
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li>
                                     <a href="{% url 'index' %}?page={{ page_obj.next_page_number }}">next</a>
-                                {% endif %}
-                            </span>
-                        </div>
+                                </li>
+                            {% endif %}
+                        </ul>
                     {% endif %}
                 </div>
             </div>
