@@ -1,8 +1,10 @@
+import json
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.core import serializers
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -25,6 +27,12 @@ class IndexView(ListView):
     def get_queryset(self):
         boutiques = Boutique.objects.exclude(owner=self.request.user)
         return Product.objects.filter(boutique__in=boutiques).filter(active=True)
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['categories'] = Categorie.objects.all()
+        context['rows'] = range(0, self.get_queryset().count(), 3)
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
@@ -49,10 +57,6 @@ class ProductUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('detail_boutique', kwargs={'pk': self.kwargs['boutique_id']})
-
-    def get_initial(self):
-        return {'image': self.object.image}
-
 
 
 @method_decorator(login_required, name='dispatch')
@@ -123,6 +127,17 @@ class BoutiqueUpdateView(UpdateView):
 class BoutiqueDeleteView(DeleteView):
     model = Boutique
     success_url = reverse_lazy('index')
+
+
+@login_required
+def search_view(request):
+    if request.method == 'GET':
+        categorie_id = request.GET['categorie_id']
+        products = Product.objects.filter(categorie=Categorie.objects.get(pk=categorie_id))
+        data = {
+            'products': serializers.serialize('json', products)
+        }
+        return HttpResponse(JsonResponse(data), content_type="application/json")
 
 
 def login_view(request):

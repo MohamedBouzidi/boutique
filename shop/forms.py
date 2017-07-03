@@ -20,7 +20,7 @@ class BoutiqueForm(ModelForm):
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'price', 'image', 'description', 'active', 'quantite', 'categorie']
+        fields = ['name', 'price', 'image', 'description', 'active', 'quantite', 'categorie', 'type']
         widgets = {
             'name': TextInput(attrs={'class': 'form-control'}),
             'price': TextInput(attrs={'class': 'form-control'}),
@@ -28,4 +28,5 @@ class ProductForm(ModelForm):
             'description': Textarea(attrs={'class': 'form-control'}),
             'quantite': TextInput(attrs={'class': 'form-control'}),
             'categorie': Select(attrs={'class': 'form-control'}),
+            'type': Select(attrs={'class': 'form-control'}),
         }

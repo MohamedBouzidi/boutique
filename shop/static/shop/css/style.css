@@ -21,3 +21,16 @@
 .product .badge {
     float: right;
 }
+
+.sidebar .panel-body a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.sidebar .panel-body a:hover {
+    text-decoration: none;
+    color: steelblue;
+    cursor: pointer;
+}

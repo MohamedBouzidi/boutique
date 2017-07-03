@@ -45,6 +45,22 @@ class Boutique(models.Model):
 class Categorie(models.Model):
     label = models.CharField(max_length=255, blank=False, unique=True)
 
+    def __unicode__(self):
+        return self.label
+
+    def __str__(self):
+        return self.label
+
+
+class Type(models.Model):
+    label = models.CharField(max_length=255, blank=False, unique=True)
+
+    def __unicode__(self):
+        return self.label
+
+    def __str__(self):
+        return self.label
+
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -56,6 +72,11 @@ class Product(models.Model):
     quantite = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     boutique = models.ForeignKey(Boutique, on_delete=models.CASCADE)
     categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
+    type = models.ForeignKey(Type, on_delete=models.CASCADE)
+
+
+    def __unicode__(self):
+        return self.name
 
     def get_absolute_url(self):
         return reverse_lazy('detail_product', {'boutique_id': self.boutique.id, 'pk': self.id})
