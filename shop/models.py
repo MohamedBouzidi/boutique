@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse_lazy
 from django.core.validators import MinValueValidator
 
 
@@ -24,7 +25,7 @@ class BusinessUser(models.Model):
 
 class Boutique(models.Model):
     name = models.CharField(max_length=255, blank=False)
-    owner = models.ForeignKey(BusinessUser)
+    owner = models.ForeignKey(User)
     processing_time = models.FloatField(default=0.0)
     address = models.CharField(max_length=255,  blank=False)
     logo = models.ImageField(upload_to=get_boutique_logo_link)
@@ -32,9 +33,13 @@ class Boutique(models.Model):
     description = models.TextField(blank=True)
     facebook_link = models.CharField(max_length=255, blank=True)
     instagram_link = models.CharField(max_length=255, blank=True)
+    phone = models.CharField(max_length=20, blank=True)
 
     class Meta:
         unique_together = (("name", "owner"),)
+
+    def get_absolute_url(self):
+        return reverse_lazy('detail_boutique', {'pk': self.id})
 
 
 class Categorie(models.Model):
@@ -44,12 +49,16 @@ class Categorie(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to=get_product_image_link)
-    prix_produit = models.FloatField(validators=[MinValueValidator(0.0)])
+    price = models.FloatField(validators=[MinValueValidator(0.0)])
     description = models.TextField(blank=True)
+    date = models.DateTimeField(default=timezone.now)
     active = models.BooleanField(default=False)
     quantite = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     boutique = models.ForeignKey(Boutique, on_delete=models.CASCADE)
     categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse_lazy('detail_product', {'boutique_id': self.boutique.id, 'pk': self.id})
 
 
 class Picture(models.Model):

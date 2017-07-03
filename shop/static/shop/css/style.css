@@ -1,0 +1,23 @@
+.img-responsive {
+	width: 100%;
+	height: auto;
+}
+
+.img-responsive-small {
+    width: 60px;
+    height: auto;
+}
+
+.img-responsive-thumbnail {
+    height: 120px;
+    width: auto;
+}
+
+.product:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.product .badge {
+    float: right;
+}

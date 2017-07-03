@@ -1,0 +1,10 @@
+<a href="{% url 'detail_product' product.boutique.id product.id %}" class="product">
+    <div class="thumbnail">
+      <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive-thumbnail">
+      <div class="caption">
+        <h3>{{ product.name }}</h3>
+        <span class="badge">{{ product.price }}</span>
+        <p>{{ product.description }}</p>
+      </div>
+    </div>
+</a>

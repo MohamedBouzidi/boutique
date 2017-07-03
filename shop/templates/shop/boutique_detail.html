@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+            <h2>{{ boutique.name }}</h2>
+            <p>{{ boutique.description }}</p>
+            <span>{{ boutique.product_set.count }} produit(s)</span><br><br>
+            <a href="{% url 'new_product' boutique.id %}" class="btn btn-default">Ajouter un produit</a>
+        </div>
+        <div class="col-md-8">
+            <table class="table table-hover">
+                <thead>
+                    <th>Etat</th>
+                    <th>Titre</th>
+                    <th>Quantite</th>
+                    <th>Prix</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>
+                                {% if product.active %}
+                                <span class="label label-info">Active</span>
+                                {% else %}
+                                <span class="label label-warning">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td><img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive-small">{{ product.name }}</td>
+                            <td>{{ product.quantite }}</td>
+                            <td>{{ product.price }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{% url 'detail_product' product.boutique.id product.id %}" class="btn btn-default btn-sm">Detail</a>
+                                    <a href="{% url 'edit_product' product.boutique.id product.id %}" class="btn btn-default btn-sm">Edit</a>
+                                    <a href="{% url 'delete_product' product.boutique.id product.id %}" class="btn btn-default btn-sm delete" data-product-id="{{ product.id }}" data-boutique-id="{{ product.boutique.id }}">Delete</a>
+                                    <a href="{% url 'dublicate_product' product.boutique.id product.id %}" class="btn btn-default btn-sm">Dublicate</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        $(".delete").on('click', function (e) {
+            e.preventDefault();
+            var c = confirm("Are you sure?");
+            if (c) {
+                $.ajaxSetup({ 
+                     beforeSend: function(xhr, settings) {
+                         function getCookie(name) {
+                             var cookieValue = null;
+                             if (document.cookie && document.cookie != '') {
+                                 var cookies = document.cookie.split(';');
+                                 for (var i = 0; i < cookies.length; i++) {
+                                     var cookie = jQuery.trim(cookies[i]);
+                                     // Does this cookie string begin with the name we want?
+                                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                         break;
+                                     }
+                                 }
+                             }
+                             return cookieValue;
+                         }
+                         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                             // Only send the token to relative URLs i.e. locally.
+                             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                         }
+                     } 
+                });
+
+                var $this = $(this);
+                var productId = $this.attr("data-product-id");
+                var boutiqueId = $this.attr("data-boutique-id");
+                $.ajax({
+                    url: boutiqueId + "/products/" + productId + "/delete",
+                    type: "POST",
+                    success: function (data) {
+                        $this.parent().parent().parent().remove();
+                    }
+                });                
+            }
+        });
+    </script>
+{% endblock %}
