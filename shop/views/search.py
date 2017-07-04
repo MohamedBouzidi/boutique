@@ -1,16 +1,26 @@
+import json
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.core import serializers
+from django.db.models import Q
 
-from shop.models import Product, Categorie
+from shop.models import Product, Categorie, Type
 
 
 @login_required
-def search_view(request):
-    if request.method == 'GET':
-        categorie_id = request.GET['categorie_id']
-        products = Product.objects.filter(categorie=Categorie.objects.get(pk=categorie_id))
-        data = {
-            'products': serializers.serialize('json', products)
-        }
-        return HttpResponse(JsonResponse(data), content_type="application/json")
+def get_search_results(request):
+    context = { 
+        "categories": Categorie.objects.all(),
+        "types": Type.objects.all()
+    }
+
+    if request.method == 'POST':
+        categorie_ids = request.POST.getlist('categories[]')
+        price = request.POST['price']
+
+        categories = Categorie.objects.filter(pk__in = categorie_ids)
+        context["products"] = Product.objects.filter(categorie__in = categories).order_by('-date')
+
+
+    return render(request, 'shop/index.html', context)

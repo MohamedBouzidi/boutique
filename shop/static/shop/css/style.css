@@ -52,3 +52,7 @@
 .add-extra-picture:hover {
     text-decoration: none;
 }
+
+.number_input {
+    width: 50px;
+}

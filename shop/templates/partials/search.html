@@ -1,31 +1,44 @@
 <div class="panel panel-default sidebar">
     <div class="panel-body">
-        <h3>Tous les catégories</h3>
-        {% for categorie in categories %}
-            <a href="#" class="categorie" data-categorie-id="{{ categorie.id }}">{{ categorie.label }}</a>
-        {% endfor %}
-        <hr>
-        <h3>Prix</h3>
-        <div class="radio">
-            <label><input type="radio" name="price">entre 0 et 20</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="price">entre 20 et 80</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="price">entre 80 et 100</label>
-        </div>
-        <div class="radio">
-            <label><input type="radio" name="price">100 ou plus</label>
-        </div>
-        <hr>
-        <h3>Type</h3>
-        <select name="type" class="form-control">
-            <option value="None">--------</option>
-            {% for type in types %}
-                <option value="{{ type.id }}">{{ type.label }}</option>
+        <form action="{% url 'search' %}" method="post">
+            {% csrf_token %}
+            <h3>Tous les catégories</h3>
+            {% for categorie in categories %}
+                <div class="checkbox">
+                    <label><input type="checkbox" name="categories[]" value="{{ categorie.id }}">{{ categorie.label }}</label>
+                </div>
             {% endfor %}
-        </select>
+            <hr>
+            <h3>Prix</h3>
+            <div class="radio">
+                <label><input type="radio" name="price" value="custom" checked>entre
+                <input type="number" value="0" name="min_price" class="number_input"> et <input type="number" value="0" class="number_input" name="max_price"></label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="price" value="0">entre 0 et 20</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="price" value="1">entre 20 et 80</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="price" value="2">entre 80 et 100</label>
+            </div>
+            <div class="radio">
+                <label><input type="radio" name="price" value="3">100 ou plus</label>
+            </div>
+            <hr>
+            <h3>Type</h3>
+            <select name="type" class="form-control">
+                <option value="any">--------</option>
+                {% for type in types %}
+                    <option value="{{ type.id }}">{{ type.label }}</option>
+                {% endfor %}
+            </select><br>
+            <input type="submit" value="Filter" class="btn btn-block btn-success">
+        </form>
     </div>
 </div>
+
+{% load static %}
+<script src="{% static 'shop/js/sidebar.js' %}"></script>
 

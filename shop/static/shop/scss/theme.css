@@ -26,4 +26,6 @@ body {
     padding: 10px; }
 
 .product .thumbnail:hover {
-  border: 1px solid lightgreen; }
+  border-bottom: 4px solid lightgreen; }
+  .product .thumbnail:hover .caption h3 {
+    color: lightgreen; }

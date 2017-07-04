@@ -42,7 +42,10 @@ body {
 .product {
     .thumbnail {
         &:hover {
-            border: 1px solid lightgreen;
+            border-bottom: 4px solid lightgreen;
+            .caption h3 {
+                color: lightgreen;
+            }
         }
     }
 }
