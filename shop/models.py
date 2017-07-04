@@ -24,6 +24,7 @@ class BusinessUser(models.Model):
     user = models.OneToOneField(User)
     description = models.CharField(max_length=255)
     picture = models.ImageField(upload_to=get_user_picture_link)
+    type = models.CharField(max_length=255, choices=(('ENTERPRISE', 'Entreprise'), ('INDIVIDUAL', 'Particulier'),))
 
 
 class Boutique(models.Model):
