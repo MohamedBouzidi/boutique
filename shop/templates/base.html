@@ -6,7 +6,9 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'shop/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
-
+    
+    {% load sass_tags %}
+    <link rel="stylesheet" href="{% sass_src 'shop/scss/theme.scss' %}">
 
     <script src="{% static 'shop/js/jquery.min.js' %}"></script>
     <script src="{% static 'shop/js/bootstrap.min.js' %}"></script>

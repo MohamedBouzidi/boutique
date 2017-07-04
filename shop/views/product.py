@@ -20,6 +20,11 @@ class ProductCreateView(CreateView):
         obj.save()
         return super(ProductCreateView, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(ProductCreateView, self).get_context_data(**kwargs)
+        context['boutique'] = Boutique.objects.get(pk=self.kwargs['boutique_id'])
+        return context
+
     def get_success_url(self):
         return reverse_lazy('detail_boutique', kwargs={'pk': self.kwargs['boutique_id']})
 
@@ -31,6 +36,11 @@ class ProductUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('detail_boutique', kwargs={'pk': self.kwargs['boutique_id']})
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductUpdateView, self).get_context_data(**kwargs)
+        context['boutique'] = self.get_object().boutique
+        return context
 
 
 @method_decorator(login_required, name='dispatch')

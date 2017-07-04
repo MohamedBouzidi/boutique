@@ -1,30 +1,43 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-4">
-            <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive">
-            <div class="extra-images">
-                <div class="row">
-                {% for picture in pictures %}
-                    <div class="col-md-4">
-                        <img src="{{ MEDIA_URL }}{{ picture.name.url }}" alt="{{ product.name }}" class="img-responsive">
-                    </div>        
-                {% endfor %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive" id="image-primary">
+                    <div class="extra-images">
+                        <div class="row">
+                        {% for picture in pictures %}
+                            <div class="col-md-4">
+                                <img src="{{ MEDIA_URL }}{{ picture.name.url }}" alt="{{ product.name }}" class="img-responsive image-secondary">
+                            </div>        
+                        {% endfor %}
+                        </div>
+                        {% if product.boutique.owner == request.user %}
+                            <a href="{% url 'new_product_picture' product.boutique.id product.id %}" class="add-extra-picture" data-product-id="{{ product.id }}">&plus;</a>
+                        {% endif %}
+                    </div>
                 </div>
-                {% if product.boutique.owner == request.user %}
-                    <a href="{% url 'new_product_picture' product.boutique.id product.id %}" class="add-extra-picture" data-product-id="{{ product.id }}">&plus;</a>
-                {% endif %}
+                <div class="col-md-8">
+                    <h2>{{ product.name }}</h2>
+                    <span class="label label-info">{{ product.price }}</span>
+                    <p>{{ product.description }}</p>
+                </div>
             </div>
-        </div>
-        <div class="col-md-8">
-            <h2>{{ product.name }}</h2>
-            <span class="label label-info">{{ product.price }}</span>
-            <p>{{ product.description }}</p>
         </div>
     </div>
 
     <script>
+        $(".image-secondary").on('click', function (e) {
+            e.preventDefault();
+            $this = $(this);
+            $primary = $("#image-primary");
+            $primary_src = $primary.attr("src");
+            $secondary_src = $this.attr("src");
+            $primary.attr("src", $secondary_src);
+            $this.attr("src", $primary_src);
+        });
         // $(".add-extra-picture").on('click', function (e) {
         //     e.preventDefault();
         //     $.ajaxSetup({ 

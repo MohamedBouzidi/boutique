@@ -2,34 +2,39 @@
 
 {% block content %}
     {% if boutiques %}
-    <table class="table">
-        <thead>
-            <th>#</th>
-            <th>Nom</th>
-            <th>Logo</th>
-            <th>Adresse</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </thead>
-        <tbody>
-            {% for boutique in boutiques %}
-                <tr>
-                    <td>{{ boutique.id }}</td>
-                    <td>{{ boutique.name }}</td>
-                    <td><img src="{{ MEDIA_URL }}{{ boutique.logo.url }}" alt="{{ boutique.name }}" class="img-responsive-small"></td>
-                    <td>{{ boutique.address }}</td>
-                    <td>{{ boutique.description }}</td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="...">
-                          <a href="{% url 'detail_boutique' boutique.id %}" class="btn btn-default btn-sm">Detail</a>
-                          <a href="{% url 'edit_boutique' boutique.id %}" class="btn btn-default btn-sm">Edit</a>
-                          <a href="{% url 'delete_boutique' boutique.id %}" class="btn btn-default btn-sm">Delete</a>
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>Mes Boutiques</h2>
+            <table class="table">
+                <thead>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Logo</th>
+                    <th>Adresse</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </thead>
+                <tbody>
+                    {% for boutique in boutiques %}
+                        <tr>
+                            <td>{{ boutique.id }}</td>
+                            <td>{{ boutique.name }}</td>
+                            <td><img src="{{ MEDIA_URL }}{{ boutique.logo.url }}" alt="{{ boutique.name }}" class="img-responsive-small"></td>
+                            <td>{{ boutique.address }}</td>
+                            <td>{{ boutique.description }}</td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="...">
+                                  <a href="{% url 'detail_boutique' boutique.id %}" class="btn btn-default btn-sm">Detail</a>
+                                  <a href="{% url 'edit_boutique' boutique.id %}" class="btn btn-default btn-sm">Edit</a>
+                                  <a href="{% url 'delete_boutique' boutique.id %}" class="btn btn-default btn-sm">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% else %}
         <p>Pas de boutiques. <a href="{% url 'new_boutique' %}">Ajouter boutique</a></p>
     {% endif %}

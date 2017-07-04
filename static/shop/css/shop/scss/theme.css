@@ -1,0 +1,31 @@
+body {
+  background-color: #efefff; }
+
+.navbar {
+  background: white;
+  border-radius: 0;
+  border-bottom: 4px solid lightgreen;
+  box-shadow: 1px 2px 4px #505050; }
+  .navbar .navbar-brand {
+    font-weight: bold;
+    font-size: 1.6em; }
+  .navbar .navbar-form button {
+    background-color: lightgreen;
+    color: white; }
+  .navbar .navbar-form input[type=text] {
+    width: 260px;
+    border-radius: 0;
+    padding: 5px;
+    outline: none; }
+  .navbar .nav a {
+    color: black;
+    font-weight: bold; }
+    .navbar .nav a:hover {
+      color: lightgreen; }
+  .navbar .dropdown .dropdown-menu a {
+    padding: 10px; }
+
+.product .thumbnail:hover {
+  border: 1px solid lightgreen; }
+
+/*# sourceMappingURL=../../../../../../../../../../static/shop/scss/theme.css.map */

@@ -1,2 +1,5 @@
 Django>=1.11
 Pillow
+libsass
+django-compressor
+django-sass-processor
