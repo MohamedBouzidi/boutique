@@ -24,10 +24,10 @@
                     <td>{{ product.price }}</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <a href="{% url 'detail_product' product.boutique.id product.id %}" class="btn btn-default btn-sm">Detail</a>
-                            <a href="{% url 'edit_product' product.boutique.id product.id %}" class="btn btn-default btn-sm">Edit</a>
-                            <a href="{% url 'delete_product' product.boutique.id product.id %}" class="btn btn-default btn-sm delete" data-product-id="{{ product.id }}" data-boutique-id="{{ product.boutique.id }}">Delete</a>
-                            <a href="{% url 'dublicate_product' product.boutique.id product.id %}" class="btn btn-default btn-sm">Dublicate</a>
+                            <a href="{% url 'detail_product' product.boutique.id product.id %}" class="btn btn-default btn-sm" id="detail-url">Detail</a>
+                            <a href="{% url 'edit_product' product.boutique.id product.id %}" class="btn btn-default btn-sm" id="edit-url">Edit</a>
+                            <a href="{% url 'delete_product' product.boutique.id product.id %}" class="btn btn-default btn-sm delete" data-product-id="{{ product.id }}" data-boutique-id="{{ product.boutique.id }}" id="delete-url">Delete</a>
+                            <a href="{% url 'dublicate_product' product.boutique.id product.id %}" class="btn btn-default btn-sm dublicate" data-boutique-id="{{ product.boutique.id }}" data-product-id="{{ product.id }}" id="dublicate-url">Dublicate</a>
                         </div>
                     </td>
                 </tr>

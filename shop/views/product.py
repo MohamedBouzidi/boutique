@@ -1,4 +1,5 @@
-from django.http import HttpResponseRedirect
+import json
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic import CreateView, DetailView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
@@ -53,11 +54,16 @@ class ProductDeleteView(DeleteView):
 
 @login_required
 def product_dublicate_view(request, boutique_id, pk):
-    product = Product.objects.get(pk=pk)
-    product.id = None
-    product.save()
-    return HttpResponseRedirect(reverse_lazy('edit_product', kwargs={'boutique_id': product.boutique.id, 'pk': product.id}))
-
+    data = {}
+    if request.method == 'POST':
+        product = Product.objects.get(pk=pk)
+        product.id = None
+        product.save()
+        data = {
+            "message": "success",
+            "id": product.id
+        }
+    return JsonResponse(json.dumps(data), safe=False)
 
 @method_decorator(login_required, name='dispatch')
 class ProductDetailView(DetailView):
