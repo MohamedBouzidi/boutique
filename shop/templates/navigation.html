@@ -20,7 +20,7 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="{% url 'list_boutique' %}">Mes Boutiques</a></li>
-        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><a href="{% url 'logout' %}">Logout ({{ request.user.email }})</a></li>
       </ul>
     </div>
   </div>

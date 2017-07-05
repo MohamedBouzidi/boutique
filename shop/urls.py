@@ -13,7 +13,6 @@ urlpatterns = [
     url(r'^logout$', views.logout_view, name='logout'),
     
     # AJAX URLs
-    url(r'^filter$', views.filter_view, name='filter'),
     url(r'^search$', views.search_view, name='search'),
     
     # Product URLs

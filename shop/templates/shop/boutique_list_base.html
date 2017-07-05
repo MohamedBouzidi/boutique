@@ -2,10 +2,13 @@
 
 {% block content %}
     <div class="panel panel-default">
-        <div class="panel-body">
+        <div class="panel-body" style="min-height: 220px;">
             <div class="row">
                 <div class="col-md-4">
                     <div class="affix">
+                        {% if user.businessuser %}
+                            <img src="{{ MEDIA_URL }}{{ user.businessuser.picture.url }}" alt="{{ user.businessuser.username }}">
+                        {% endif %}
                         <h2>{{ user.username }}</h2>
                         <p>{{ user.email }}</p>
                         <span>{{ user.boutique_set.count }} boutiques(s)</span><br><br>

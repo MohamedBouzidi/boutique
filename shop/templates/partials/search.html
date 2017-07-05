@@ -4,9 +4,7 @@
             {% csrf_token %}
             <h3>Tous les catégories</h3>
             {% for categorie in categories %}
-                <div class="checkbox">
-                    <label><input type="checkbox" name="categories[]" class="categorie" value="{{ categorie.id }}">{{ categorie.label }}</label>
-                </div>
+                <a href="{% url 'search' %}?c={{ categorie.id }}" name="categorie">{{ categorie.label }} ({{ categorie.product_set.count }})</a>
             {% endfor %}
             <hr>
             <h3>Prix</h3>

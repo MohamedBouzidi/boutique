@@ -20,7 +20,29 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-                {% include 'partials/paginator.html' with products=products params=params %}
+                {% if products.has_other_pages %}
+                <div class="row">
+                    <ul class="pagination">
+                        {% if products.has_previous %}
+                          <li><a href="?q={{term}}&amp;page={{ products.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                          <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in products.paginator.page_range %}
+                          {% if products.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                          {% else %}
+                            <li><a href="?q={{term}}&amp;page={{ i }}">{{ i }}</a></li>
+                          {% endif %}
+                        {% endfor %}
+                        {% if products.has_next %}
+                          <li><a href="?q={{term}}&amp;page={{ products.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                          <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                      </ul>
+                </div>
+                {% endif %}
             </div>
 
             {% load static %}
