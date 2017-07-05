@@ -8,11 +8,13 @@ urlpatterns = [
 
     # Login & Register URLs
     url(r'^login$', views.login_view, name='login'),
+    url(r'^register/business$', views.business_register_view, name='business_register'),
     url(r'^register$', views.register_view, name='register'),
     url(r'^logout$', views.logout_view, name='logout'),
     
     # AJAX URLs
-    url(r'^search$', views.get_search_results, name='search'),
+    url(r'^filter$', views.filter_view, name='filter'),
+    url(r'^search$', views.search_view, name='search'),
     
     # Product URLs
     url(r'^(?P<boutique_id>\d+)/products/(?P<product_id>\d+)/picture/new$', views.ProductPictureCreateView.as_view(), name='new_product_picture'),

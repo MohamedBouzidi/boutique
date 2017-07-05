@@ -1,5 +1,5 @@
 $("document").ready(function () {
-    $(".categorie").on('click', function (e) {
+    $("#submit-button").on('click', function (e) {
         e.preventDefault();
         $.ajaxSetup({ 
              beforeSend: function(xhr, settings) {
@@ -28,17 +28,17 @@ $("document").ready(function () {
         var categorieId = $this.attr("data-categorie-id");
         $.ajax({
             url: "filter",
-            type: "GET",
+            type: "POST",
             dataType: "json",
             data: {
                 "categorie_id": categorieId,
-                "price_min": "",
-                "price_max": "",
-                "type_id": ""
+                "price_min": 1,
+                "price_max": 2,
+                "type_id": 2
             },
             success: function (data) {
-                $products = $("#product_list");                // $products.html("");
-                console.log(data.products);
+                $products = $("#product_list");
+                console.log(data);
             }
         });
     });

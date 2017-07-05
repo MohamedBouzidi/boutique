@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-sm-6">
+            <div class="affix">
+                {% include 'partials/search.html' with categories=categories types=types %}
+            </div>
+        </div>
+        {% if products %}
+            <div class="col-md-8 col-sm-6" id="product_list">
+                <div class="row">
+                    {% for product in products %}
+                        <div class="col-md-4 col-sm-12">
+                            {% include 'partials/product.html' with product=product %}
+                        </div>
+                        {% if forloop.counter in rows %}
+                        </div>
+                        <div class="row">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% if products.has_other_pages %}
+                <div class="row">
+                    <ul class="pagination">
+                        {% if products.has_previous %}
+                          <li><a href="?q={{term}}&amp;page={{ products.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                          <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in products.paginator.page_range %}
+                          {% if products.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                          {% else %}
+                            <li><a href="?q={{term}}&amp;page={{ i }}">{{ i }}</a></li>
+                          {% endif %}
+                        {% endfor %}
+                        {% if products.has_next %}
+                          <li><a href="?q={{term}}&amp;page={{ products.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                          <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                      </ul>
+                </div>
+                {% endif %}
+            </div>
+
+            {% load static %}
+            <script src="{% static 'shop/js/search.js' %}"></script>
+        {% else %}
+                <div class="col-md-8 col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>No products matching search query.</p>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+{% endblock %}

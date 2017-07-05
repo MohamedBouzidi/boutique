@@ -1,9 +1,12 @@
+import json
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.core.urlresolvers import reverse_lazy
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+
+from shop.models import BusinessUser
 
 
 def login_view(request):
@@ -31,6 +34,25 @@ def register_view(request):
                 user = User.objects.create_user(username=email, password=password, email=email)
                 return HttpResponseRedirect(reverse_lazy('index'))
     return render(request, "shop/login_register_form.html")
+
+
+def business_register_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        description = request.POST['description']
+        picture = request.POST['picture']
+        type = request.POST['type']
+
+        businessuser = BusinessUser(description=description, picture=picture, type=type)
+        businessuser.user = request.user
+        businessuser.user.username = username
+        businessuser.save()
+        data = {
+            "message": "success"
+        }
+        return JsonResponse()
+    else:
+        return HttpResponseRedirect(reverse_lazy('index'))
 
 
 def logout_view(request):

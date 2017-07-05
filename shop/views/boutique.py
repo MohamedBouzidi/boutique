@@ -5,7 +5,7 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-from shop.models import Boutique
+from shop.models import Boutique, BusinessUser
 from shop.forms import BoutiqueForm
 
 
@@ -25,6 +25,11 @@ class BoutiqueCreateView(CreateView):
     model = Boutique
     success_url = reverse_lazy('index')
     form_class = BoutiqueForm
+
+    def get_context_data(self, **kwargs):
+        context = super(BoutiqueCreateView, self).get_context_data(**kwargs)
+        context['new_businessuser'] = BusinessUser.objects.filter(user=self.request.user).count() == 0
+        return context
 
     def form_valid(self, form):
         obj = form.save(commit=False)

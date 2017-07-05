@@ -1,9 +1,13 @@
 {% extends 'shop/boutique_list_base.html' %}
 
 {% block section %}
+    {% if new_businessuser == True %}
+    {% include 'partials/wizard.html' with form=form %}
+    {% else %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit" class="btn btn-default" />
     </form>
+    {% endif %}
 {% endblock %}

@@ -5,7 +5,7 @@
             <h3>Tous les catégories</h3>
             {% for categorie in categories %}
                 <div class="checkbox">
-                    <label><input type="checkbox" name="categories[]" value="{{ categorie.id }}">{{ categorie.label }}</label>
+                    <label><input type="checkbox" name="categories[]" class="categorie" value="{{ categorie.id }}">{{ categorie.label }}</label>
                 </div>
             {% endfor %}
             <hr>
@@ -34,7 +34,7 @@
                     <option value="{{ type.id }}">{{ type.label }}</option>
                 {% endfor %}
             </select><br>
-            <input type="submit" value="Filter" class="btn btn-block btn-success">
+            <input type="submit" value="Filter" class="btn btn-block btn-success" id="submit-button">
         </form>
     </div>
 </div>
