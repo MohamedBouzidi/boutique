@@ -28,6 +28,13 @@
                             <a href="{% url 'edit_product' product.boutique.id product.id %}" class="btn btn-default btn-sm" id="edit-url">Edit</a>
                             <a href="{% url 'delete_product' product.boutique.id product.id %}" class="btn btn-default btn-sm delete" data-product-id="{{ product.id }}" data-boutique-id="{{ product.boutique.id }}" id="delete-url">Delete</a>
                             <a href="{% url 'dublicate_product' product.boutique.id product.id %}" class="btn btn-default btn-sm dublicate" data-boutique-id="{{ product.boutique.id }}" data-product-id="{{ product.id }}" id="dublicate-url">Dublicate</a>
+                            <a href="{% url 'state_product' product.boutique.id product.id %}" class="btn btn-default btn-sm state" data-boutique-id="{{ product.boutique.id }}" data-product-id="{{ product.id }}" data-product-active="{{ product.active }}" id="state-url">
+                                {% if product.active %}
+                                    Desactivate
+                                {% else %}
+                                    Activate
+                                {% endif %}
+                            </a>
                         </div>
                     </td>
                 </tr>

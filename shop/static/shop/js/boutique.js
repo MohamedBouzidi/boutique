@@ -53,3 +53,25 @@ $(".dublicate").on('click', function (e) {
         } 
     });
 });
+
+$(".state").on('click', function (e) {
+    e.preventDefault();
+    var $this = $(this);
+    var boutiqueId = $this.attr("data-boutique-id");
+    var productId =  $this.attr("data-product-id");
+
+    $.ajax({
+        url: boutiqueId + '/products/' + productId + '/state',
+        type: 'POST',
+        success: function (data) {
+            var $label = $this.closest('tr').children('td:first').children('.label');
+            if ($this.text().trim() == 'Activate') {
+                $this.text('Desactivate');
+                $label.text('Active').removeClass('label-warning').addClass('label-info');
+            } else {
+                $this.text('Activate');
+                $label.text('Inactive').removeClass('label-info').addClass('label-warning');
+            }
+        }
+    });
+});

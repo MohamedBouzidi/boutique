@@ -1,6 +1,6 @@
 import json
 from django.http import HttpResponseRedirect, JsonResponse
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, TemplateView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -89,3 +89,16 @@ class ProductPictureCreateView(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('detail_product', kwargs={'boutique_id': self.kwargs['boutique_id'], 'pk': self.kwargs['product_id']})
+
+
+@login_required
+def product_state_view(request, boutique_id, pk):
+    data = {}
+
+    if request.method == 'POST':
+        product = Product.objects.get(pk=pk)
+        product.active = not product.active
+        product.save()
+        data["message"] = "success"
+
+    return JsonResponse(json.dumps(data), safe=False)
