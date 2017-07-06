@@ -7,7 +7,7 @@
                 <div class="col-md-4">
                     <div class="affix">
                         {% if user.businessuser %}
-                            <img src="{{ MEDIA_URL }}{{ user.businessuser.picture.url }}" alt="{{ user.businessuser.username }}">
+                            <img src="{{ MEDIA_URL }}{{ user.businessuser.picture.url }}" alt="{{ user.businessuser.username }}" class="img-responsive-thumbnail">
                         {% endif %}
                         <h2>{{ user.username }}</h2>
                         <p>{{ user.email }}</p>

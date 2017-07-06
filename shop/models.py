@@ -17,7 +17,7 @@ def get_boutique_logo_link(instance, filename):
     return os.path.join(instance.owner.username, instance.name, "{}_{}".format(instance.name, instance.date))
 
 def get_user_picture_link(instance, filename):
-    return "{}_{}".format(instance.user.username, instance.user.date_joined)
+    return os.path.join(instance.user.username, "{}_{}".format(instance.user.username, instance.user.date_joined))
 
 
 class BusinessUser(models.Model):

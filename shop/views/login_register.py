@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 from shop.models import BusinessUser
+from shop.forms import BusinessUserForm
 
 
 def login_view(request):
@@ -38,19 +39,17 @@ def register_view(request):
 
 def business_register_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        description = request.POST['description']
-        picture = request.POST['picture']
-        type = request.POST['type']
+        data = {"message": "failed"}
+        form = BusinessUserForm(request.POST, request.FILES)
 
-        businessuser = BusinessUser(description=description, picture=picture, type=type)
-        businessuser.user = request.user
-        businessuser.user.username = username
-        businessuser.save()
-        data = {
-            "message": "success"
-        }
-        return JsonResponse(data, safe=False)
+        if form.is_valid():
+            fields = form.cleaned_data
+            businessuser = BusinessUser(picture=fields['picture'], description=fields['description'], type=fields['type'])
+            businessuser.user = request.user
+            businessuser.save()
+            data["message"] = "success"
+        
+        return JsonResponse(json.dumps(data), safe=False)
     else:
         return HttpResponseRedirect(reverse_lazy('index'))
 

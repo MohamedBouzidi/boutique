@@ -1,5 +1,16 @@
 from django.forms import ModelForm, TextInput, Textarea, PasswordInput, FileInput, Select, CheckboxInput
-from .models import Boutique, Product, Categorie, Picture
+from .models import Boutique, Product, Categorie, Picture, BusinessUser
+
+
+class BusinessUserForm(ModelForm):
+    class Meta:
+        model = BusinessUser
+        fields = ['picture', 'description', 'type']
+        widgets = {
+            'picture': FileInput(attrs={'class': 'form-control'}),
+            'description': Textarea(attrs={'class': 'form-control'}),
+            'type': Select(attrs={'class': 'form-control'})
+        }
 
 
 class BoutiqueForm(ModelForm):
