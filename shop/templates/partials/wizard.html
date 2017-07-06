@@ -7,7 +7,8 @@
         </div>
     </div>
     <div class="panel-body">
-        <form action="{% url 'business_register' %}" id="businessuser_form">
+        <form action="{% url 'business_register' %}" id="businessuser_form" method="post">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" name="username" id="username" class="form-control" required>
@@ -40,79 +41,31 @@
 
 <script>
     $("document").ready(function () {
-        var username = '';
-        var description = '';
-        var picture = '';
-        var type = '';
+        var businessuserForm = $("#businessuser_form");
+        var boutiqueForm = $("#new_boutique_form");
 
         $("#new_boutique_form").hide();
         $("#businessuser").addClass("active");
+
         $("#next").on('click', function (e) {
             e.preventDefault();
-
-            username = $("#username").val();
-            description = $("#description").val();
-            picture = $("#picture").val();
-            type = $("#type").val();
-
             $("#boutique").toggleClass("active");
             $("#businessuser").toggleClass("active");
             $(this).parent().hide();
             $("#new_boutique_form").show();
         });
+
         $("#back").on('click', function () {
             $("#boutique").toggleClass("active");
             $("#businessuser").toggleClass("active");
             $(this).parent().hide();
             $("#businessuser_form").show();
         });
+
         $("#submit").on('click', function (e) {
             e.preventDefault();
-
-            // console.log({
-            //     "username": username,
-            //     "description": description,
-            //     "picture": picture,
-            //     "type": type
-            // });
-
-            $.ajaxSetup({ 
-                 beforeSend: function(xhr, settings) {
-                     function getCookie(name) {
-                         var cookieValue = null;
-                         if (document.cookie && document.cookie != '') {
-                             var cookies = document.cookie.split(';');
-                             for (var i = 0; i < cookies.length; i++) {
-                                 var cookie = jQuery.trim(cookies[i]);
-                                 // Does this cookie string begin with the name we want?
-                                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                     break;
-                                 }
-                             }
-                         }
-                         return cookieValue;
-                     }
-                     if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                         // Only send the token to relative URLs i.e. locally.
-                         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                     }
-                 } 
-            });
-
-            $.ajax({
-                url: 'register/business',
-                type: 'POST',
-                data: {
-                    'username': username,
-                    'description': description,
-                    'picture': picture,
-                    'type': type
-                },
-                success: function (data) {
-                    e.run();
-                }
-            });
+            businessuserForm.submit();
+            boutiqueForm.submit();
         });
     });
 </script>

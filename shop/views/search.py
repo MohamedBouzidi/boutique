@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 
 
-from shop.models import Product, Categorie, Type
+from shop.models import Product, Categorie, Type, Boutique
 
 
 @login_required
@@ -20,22 +20,25 @@ def search_view(request):
 
         search_query = request.GET.get('q', '')
 
-        products_list = None
+        boutiques = Boutique.objects.exclude(owner=request.user)
+        products_list = Product.objects.filter(boutique__in=boutiques).filter(active=True)
+
+        categorie = categorie_id or None
 
         context = {
+            'c': categorie,
+            'q': search_query,
             'categories': Categorie.objects.all(),
             'types': Type.objects.all(),
             'params': {}
         }
 
         if categorie_id != 0:
-            products_list = Product.objects.filter(categorie=Categorie.objects.get(pk=categorie_id))
+            products_list = products_list.filter(categorie=Categorie.objects.get(pk=categorie_id))
             context['params']['c'] = categorie_id
 
         if not not search_query:
-            if not products_list:
-                products_list = Product.objects
-            products_list = products_list.filter(Q(name__contains=search_query) | Q(description__contains=search_query))
+            products_list = products_list.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
             context['params']['q'] = search_query
 
         paginator = Paginator(products_list, 10)

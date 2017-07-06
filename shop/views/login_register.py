@@ -50,7 +50,7 @@ def business_register_view(request):
         data = {
             "message": "success"
         }
-        return JsonResponse()
+        return JsonResponse(data, safe=False)
     else:
         return HttpResponseRedirect(reverse_lazy('index'))
 

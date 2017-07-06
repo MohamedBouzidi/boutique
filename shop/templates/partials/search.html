@@ -4,7 +4,11 @@
             {% csrf_token %}
             <h3>Tous les catégories</h3>
             {% for categorie in categories %}
+                {% if q %}
+                <a href="{% url 'search' %}?q={{ q }}&c={{ categorie.id }}" name="categorie">{{ categorie.label }} ({{ categorie.product_set.count }})</a>
+                {% else %}
                 <a href="{% url 'search' %}?c={{ categorie.id }}" name="categorie">{{ categorie.label }} ({{ categorie.product_set.count }})</a>
+                {% endif %}
             {% endfor %}
             <hr>
             <h3>Prix</h3>
