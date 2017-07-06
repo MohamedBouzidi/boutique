@@ -4,11 +4,7 @@
             {% csrf_token %}
             <h3>Tous les catégories</h3>
             {% for categorie in categories %}
-                {% if q %}
-                <a href="{% url 'search' %}?q={{ q }}&c={{ categorie.id }}" name="categorie">{{ categorie.label }} ({{ categorie.product_set.count }})</a>
-                {% else %}
-                <a href="{% url 'search' %}?c={{ categorie.id }}" name="categorie">{{ categorie.label }} ({{ categorie.product_set.count }})</a>
-                {% endif %}
+                <a href="{% url 'search' %}?{{ params }}c={{ categorie.id }}" name="categorie">{{ categorie.label }} ({{ categorie.product_set.count }})</a>
             {% endfor %}
             <hr>
             <h3>Prix</h3>
@@ -17,16 +13,16 @@
                 <input type="number" value="0" name="min_price" class="number_input"> et <input type="number" value="0" class="number_input" name="max_price"></label>
             </div>
             <div class="radio">
-                <label><input type="radio" name="price" value="0">entre 0 et 20</label>
+                <label><input type="radio" name="price" value="0" data-min="0" data-max="20">entre 0 et 20</label>
             </div>
             <div class="radio">
-                <label><input type="radio" name="price" value="1">entre 20 et 80</label>
+                <label><input type="radio" name="price" value="1" data-min="20" data-max="80">entre 20 et 80</label>
             </div>
             <div class="radio">
-                <label><input type="radio" name="price" value="2">entre 80 et 100</label>
+                <label><input type="radio" name="price" value="2" data-min="80" data-max="100">entre 80 et 100</label>
             </div>
             <div class="radio">
-                <label><input type="radio" name="price" value="3">100 ou plus</label>
+                <label><input type="radio" name="price" value="3" data-min="100">100 ou plus</label>
             </div>
             <hr>
             <h3>Type</h3>

@@ -39,17 +39,17 @@ def register_view(request):
 
 def business_register_view(request):
     if request.method == 'POST':
-        data = {"message": "failed"}
         form = BusinessUserForm(request.POST, request.FILES)
 
         if form.is_valid():
             fields = form.cleaned_data
             businessuser = BusinessUser(picture=fields['picture'], description=fields['description'], type=fields['type'])
             businessuser.user = request.user
+            request.user.username = request.POST['username']
+            request.user.save()
             businessuser.save()
-            data["message"] = "success"
         
-        return JsonResponse(json.dumps(data), safe=False)
+        return render(request, 'shop/boutique_list.html', {'new_businessuser': False})
     else:
         return HttpResponseRedirect(reverse_lazy('index'))
 

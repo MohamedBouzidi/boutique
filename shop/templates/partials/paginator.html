@@ -2,7 +2,7 @@
 <div class="row">
     <ul class="pagination">
         {% if products.has_previous %}
-          <li><a href="?{{param}}={{value}}&amp;page={{ products.previous_page_number }}">&laquo;</a></li>
+          <li><a href="?{{params}}page={{ products.previous_page_number }}">&laquo;</a></li>
         {% else %}
           <li class="disabled"><span>&laquo;</span></li>
         {% endif %}
@@ -10,11 +10,11 @@
           {% if products.number == i %}
             <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
           {% else %}
-            <li><a href="?{{param}}={{value}}&amp;page={{ i }}">{{ i }}</a></li>
+            <li><a href="?{{params}}page={{ i }}">{{ i }}</a></li>
           {% endif %}
         {% endfor %}
         {% if products.has_next %}
-          <li><a href="?{{param}}={{value}}&amp;page={{ products.next_page_number }}">&raquo;</a></li>
+          <li><a href="?{{params}}page={{ products.next_page_number }}">&raquo;</a></li>
         {% else %}
           <li class="disabled"><span>&raquo;</span></li>
         {% endif %}

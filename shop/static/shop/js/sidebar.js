@@ -27,17 +27,16 @@ $("document").ready(function () {
         var $this = $(this);
         var categorieId = $this.attr("data-categorie-id");
         $.ajax({
-            url: "filter",
-            type: "POST",
-            dataType: "json",
+            url: 'search',
+            type: 'GET',
+            dataType: 'json',
             data: {
-                "categorie_id": categorieId,
-                "price_min": 1,
-                "price_max": 2,
-                "type_id": 2
+                'categorie_id': categorieId,
+                'price_min': 1,
+                'price_max': 2,
+                'type_id': 2
             },
             success: function (data) {
-                $products = $("#product_list");
                 console.log(data);
             }
         });
