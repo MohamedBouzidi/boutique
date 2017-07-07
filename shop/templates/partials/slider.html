@@ -1,0 +1,23 @@
+<form action="{% url 'search' %}?{{ params }}" method="get" >
+    <b>€ 10</b> <input id="ex2" type="text" class="span2" value="" data-slider-step="5" name="p"/> <b>€ 1000</b>
+    <br><br>
+    <input type="submit" class="btn btn-block btn-success" value="Apply">
+</form>
+
+
+<script>
+    function debounce(callback, duration) {
+      var timer;
+      return function () {
+        clearTimeout(timer);
+        timer = setTimeout(callback, duration);
+      }
+    }
+
+    $("#ex2").slider({
+        min: 10, 
+        max: 1000, 
+        value: [10, 1000], 
+        focus: true
+    });
+</script>

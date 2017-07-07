@@ -30,4 +30,12 @@ body {
   .product .thumbnail:hover .caption h3 {
     color: lightgreen; }
 
+.slider-handle {
+  background: lightgreen; }
+
+.sidebar .panel-body .btn-custom:hover {
+  text-decoration: none;
+  border-color: lightgreen;
+  color: lightgreen; }
+
 /*# sourceMappingURL=../../../../../../../../../../static/shop/scss/theme.css.map */

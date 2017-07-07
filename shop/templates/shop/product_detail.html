@@ -14,7 +14,7 @@
                             </div>        
                         {% endfor %}
                         </div>
-                        {% if product.boutique.owner == request.user %}
+                        {% if is_owner %}
                             <a href="{% url 'new_product_picture' product.boutique.id product.id %}" class="add-extra-picture" data-product-id="{{ product.id }}">&plus;</a>
                         {% endif %}
                     </div>

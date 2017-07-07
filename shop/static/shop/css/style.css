@@ -56,3 +56,21 @@
 .number_input {
     width: 50px;
 }
+
+.slider-horizontal {
+    width: 160px;
+    margin: 0 20px;
+}
+
+.sidebar .panel-body .btn-custom {
+    padding: 10px 25px;
+    border: 1px solid #505050;
+    border-radius: 4px;
+    color: #505050;
+}
+
+.sidebar .panel-body .btn-custom:hover {
+    text-decoration: none;
+    border-color: steelblue;
+    color: steelblue;
+}

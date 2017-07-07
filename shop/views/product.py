@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-from shop.models import Product, Picture, Boutique
+from shop.models import Product, Picture, Boutique, BusinessUser
 from shop.forms import ProductForm, PictureForm
 
 
@@ -73,6 +73,9 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data(**kwargs)
         context['pictures'] = self.get_object().picture_set.all()
+        has_businessuser = BusinessUser.objects.filter(user=self.request.user).exists()
+        if has_businessuser and self.get_object().boutique.owner == self.request.user.businessuser:
+            context['is_owner'] = True 
         return context
 
 

@@ -16,16 +16,30 @@ def search_view(request):
         except ValueError:
             return HttpResponseRedirect(reverse_lazy('index'))
 
-
         search_query = request.GET.get('q', '')
         type_id = request.GET.get('type_id', '')
+        price_range = request.GET.get('p', '10,1000')
+        price_range_list = price_range.split(',')
 
-        if request.user.businessuser:
+        try:
+            price_range_int = [int(i) for i in price_range_list]
+        except ValueError:
+            return HttpResponseRedirect(reverse_lazy('index'))
+
+        price_range_int_ordered = sorted(price_range_int)
+        price_min = price_range_int_ordered[0]
+        price_max = price_range_int_ordered[1]
+
+        if BusinessUser.objects.filter(user=request.user).exists():
             boutiques = Boutique.objects.exclude(owner=request.user.businessuser)
         else:
             boutiques = Boutique.objects.all()
             
-        products_list = Product.objects.filter(boutique__in=boutiques).filter(active=True)
+        products_list = Product.objects.filter(
+            Q(boutique__in=boutiques),
+            Q(active=True),
+            Q(price__range=[price_min, price_max])
+        )
 
         categorie = categorie_id or None
         params = ''

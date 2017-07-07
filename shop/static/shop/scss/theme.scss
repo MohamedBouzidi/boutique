@@ -49,3 +49,13 @@ body {
         }
     }
 }
+
+.slider-handle {
+    background: lightgreen;
+}
+
+.sidebar .panel-body .btn-custom:hover {
+    text-decoration: none;
+    border-color: lightgreen;
+    color: lightgreen;
+}

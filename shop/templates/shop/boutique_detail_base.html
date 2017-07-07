@@ -6,6 +6,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="affix">
+                        <img src="{{ MEDIA_URL }}{{ boutique.logo.url }}" alt="{{ boutique.name }}" class="img-responsive-thumbnail">
                         <h2>{{ boutique.name }}</h2>
                         <p>{{ boutique.description }}</p>
                         <span>{{ boutique.product_set.count }} produit(s)</span><br><br>
