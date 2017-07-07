@@ -8,13 +8,13 @@ from django.core.validators import MinValueValidator
 
 
 def get_product_image_link(instance, filename):
-    return os.path.join(instance.boutique.owner.username, instance.boutique.name, "{}_{}".format(instance.name, instance.date))
+    return os.path.join(instance.boutique.owner.user.username, instance.boutique.name, "{}_{}".format(instance.name, instance.date))
 
 def get_product_extra_image_link(instance, filename):
-   return os.path.join(instance.product.boutique.owner.username, instance.product.boutique.name, "{}_{}".format(instance.product.name, instance.date))    
+   return os.path.join(instance.product.boutique.owner.user.username, instance.product.boutique.name, "{}_{}".format(instance.product.name, instance.date))    
 
 def get_boutique_logo_link(instance, filename):
-    return os.path.join(instance.owner.username, instance.name, "{}_{}".format(instance.name, instance.date))
+    return os.path.join(instance.owner.user.username, instance.name, "{}_{}".format(instance.name, instance.date))
 
 def get_user_picture_link(instance, filename):
     return os.path.join(instance.user.username, "{}_{}".format(instance.user.username, instance.user.date_joined))
@@ -33,7 +33,7 @@ class BusinessUser(models.Model):
 
 class Boutique(models.Model):
     name = models.CharField(max_length=255, blank=False)
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(BusinessUser)
     processing_time = models.FloatField(default=0.0)
     address = models.CharField(max_length=255,  blank=False)
     logo = models.ImageField(upload_to=get_boutique_logo_link)

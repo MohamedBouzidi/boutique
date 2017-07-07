@@ -30,4 +30,8 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/edit$', views.BoutiqueUpdateView.as_view(), name='edit_boutique'),
     url(r'^(?P<pk>\d+)/delete$', views.BoutiqueDeleteView.as_view(), name='delete_boutique'),
     url(r'^(?P<pk>\d+)$', views.BoutiqueDetailView.as_view(), name='detail_boutique'),
+
+    # User URLs
+    url(r'^account/edit$', views.BusinessUserUpdateView.as_view(), name='edit_user'),
+    url(r'^account/delete$', views.BusinessUserDeleteView.as_view(), name='delete_user'),
 ]

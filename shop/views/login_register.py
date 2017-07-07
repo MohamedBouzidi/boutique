@@ -1,10 +1,14 @@
 import json
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, JsonResponse
+from django.views.generic.edit import UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponseRedirect, JsonResponse
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
+from django.utils.decorators import method_decorator
 
 from shop.models import BusinessUser
 from shop.forms import BusinessUserForm
@@ -57,3 +61,29 @@ def business_register_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse_lazy('index'))
+
+
+@method_decorator(login_required, name='dispatch')
+class BusinessUserUpdateView(UpdateView):
+    model = BusinessUser
+    success_url = reverse_lazy('list_boutique')
+    form_class = BusinessUserForm
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.user.username = self.request.POST['username']
+        obj.user.save()
+        obj.save()
+        return super(BusinessUserUpdateView, self).form_valid(form)
+
+    def get_object(self):
+        return BusinessUser.objects.get(user=self.request.user)
+
+
+@method_decorator(login_required, name='dispatch')
+class BusinessUserDeleteView(DeleteView):
+    model = BusinessUser
+    success_url = reverse_lazy('index')
+
+    def get_object(self):
+        return BusinessUser.objects.get(user=self.request.user)

@@ -75,3 +75,17 @@ $(".state").on('click', function (e) {
         }
     });
 });
+
+$("#delete-user").on('click', function (e) {
+    e.preventDefault();
+    var c = confirm("Are you sure?");
+    if (c) {
+        $.ajax({
+            url: 'account/delete',
+            type: "POST",
+            success: function (data) {
+                window.location.href = '/boutique';
+            }
+        });                
+    }
+});

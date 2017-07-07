@@ -1,6 +1,7 @@
 {% extends 'shop/boutique_detail_base.html' %}
 
 {% block section %}
+    {% if products %}
     <h3>Products</h3>
     <table class="table table-hover">
         <thead>
@@ -42,4 +43,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+        <p>No products yet.</p>
+    {% endif %}
 {% endblock %}

@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 
-from shop.models import Product, Categorie, Type, Boutique
+from shop.models import Product, Categorie, Type, Boutique, BusinessUser
 
 
 @login_required
@@ -20,7 +20,11 @@ def search_view(request):
         search_query = request.GET.get('q', '')
         type_id = request.GET.get('type_id', '')
 
-        boutiques = Boutique.objects.exclude(owner=request.user)
+        if request.user.businessuser:
+            boutiques = Boutique.objects.exclude(owner=request.user.businessuser)
+        else:
+            boutiques = Boutique.objects.all()
+            
         products_list = Product.objects.filter(boutique__in=boutiques).filter(active=True)
 
         categorie = categorie_id or None

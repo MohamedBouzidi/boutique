@@ -13,17 +13,22 @@ from shop.forms import BoutiqueForm
 class BoutiqueListView(ListView):
     model = Boutique
     context_object_name = 'boutiques'
+    template_name = 'shop/boutique_list.html'
     paginate_by = 10
 
     def get_queryset(self):
-        boutiques = Boutique.objects.filter(owner=self.request.user).order_by('-date')
+        has_businessuser = BusinessUser.objects.filter(user=self.request.user).exists()
+        if has_businessuser:
+            boutiques = Boutique.objects.filter(owner=self.request.user.businessuser).order_by('-date')
+        else:
+            boutiques = []
         return boutiques
 
 
 @method_decorator(login_required, name='dispatch')
 class BoutiqueCreateView(CreateView):
     model = Boutique
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('list_boutique')
     form_class = BoutiqueForm
 
     def get_context_data(self, **kwargs):
@@ -33,7 +38,7 @@ class BoutiqueCreateView(CreateView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.owner = self.request.user
+        obj.owner = BusinessUser.objects.get(user=self.request.user)
         obj.save()
         return super(BoutiqueCreateView, self).form_valid(form)
 
