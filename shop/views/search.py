@@ -17,7 +17,7 @@ def search_view(request):
             return HttpResponseRedirect(reverse_lazy('index'))
 
         search_query = request.GET.get('q', '')
-        type_id = request.GET.get('type_id', '')
+        type_id = request.GET.get('t', '')
         price_range = request.GET.get('p', '10,1000')
         price_range_list = price_range.split(',')
 
@@ -43,6 +43,10 @@ def search_view(request):
 
         categorie = categorie_id or None
         params = ''
+
+        if not not type_id:
+            products_list = products_list.filter(type=Type.objects.get(pk=type_id))
+            params = params + 't=' + str(type_id) + '&'
 
         if categorie_id != 0:
             products_list = products_list.filter(categorie=Categorie.objects.get(pk=categorie_id))

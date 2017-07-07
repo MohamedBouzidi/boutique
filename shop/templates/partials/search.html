@@ -5,16 +5,20 @@
             <a href="{% url 'search' %}?{{ params }}c={{ categorie.id }}" name="categorie">{{ categorie.label }} ({{ categorie.product_set.count }})</a>
         {% endfor %}
         <hr>
-        <h3>Type</h3>
-        <select name="type" class="form-control">
-            <option value="any">--------</option>
-            {% for type in types %}
-                <option value="{{ type.id }}">{{ type.label }}</option>
-            {% endfor %}
-        </select>
-        <hr>
-        <h3>Prix</h3>
-        {% include 'partials/slider.html' with params=params %}
+        <form action="{% url 'search' %}?{{ params }}" method="get" >
+            <h3>Type</h3>
+            <select name="t" class="form-control">
+                <option value="any">--------</option>
+                {% for type in types %}
+                    <option value="{{ type.id }}">{{ type.label }}</option>
+                {% endfor %}
+            </select>
+            <hr>
+            <h3>Prix</h3>
+            {% include 'partials/slider.html' with params=params %}
+            <br><br>
+            <input type="submit" class="btn btn-block btn-success" value="Apply">
+        </form>
     </div>
 </div>
 
