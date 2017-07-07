@@ -22,6 +22,7 @@
 <body>
     {% if user.is_authenticated %}
         {% include 'navigation.html' with params=params %}
+        {#% include 'partials/subnavbar.html' %#}
     {% endif %}
     <div class="container" id="main">
         {% block content %}{% endblock %}

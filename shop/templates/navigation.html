@@ -10,9 +10,18 @@
       <a class="navbar-brand" href="{% url 'index' %}">Mini</a>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <form class="navbar-form navbar-left" role="search" action="{% url 'search' %}?{{ params }}" method="get">
+      <form class="navbar-form navbar-left" role="search" action="{% url 'search' %}?{{ params }}" method="get" style="width: 750px;">
       <div class="input-group">
           <input type="text" class="form-control" placeholder="Search" id="search-input" name="q" value="{{ q }}">
+
+          <select name="o" id="order" class="form-control" style="width: 180px;">
+            <option value="a" selected>Any</option>
+            <option value="me">Most expensive</option>
+            <option value="le">Least expensive</option>
+            <option value="mr">Most recent</option>
+            <option value="lr">Least recent</option>
+          </select>
+
           <div class="input-group-btn">
               <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
           </div>

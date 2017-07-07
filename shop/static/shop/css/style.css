@@ -1,5 +1,5 @@
 #main {
-    padding-top: 70px;
+    padding-top: 80px;
 }
 
 .img-responsive {
@@ -73,4 +73,15 @@
     text-decoration: none;
     border-color: steelblue;
     color: steelblue;
+}
+
+.subnav {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 55px;
+    height: 40px;
+    width: 100%;
+    background-color: #cceecc;
+    z-index: 2;
 }

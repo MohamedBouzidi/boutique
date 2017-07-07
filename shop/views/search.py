@@ -17,6 +17,7 @@ def search_view(request):
             return HttpResponseRedirect(reverse_lazy('index'))
 
         search_query = request.GET.get('q', '')
+        order_by = request.GET.get('o', 'a')
         type_id = request.GET.get('t', '')
         price_range = request.GET.get('p', '10,1000')
         price_range_list = price_range.split(',')
@@ -56,6 +57,22 @@ def search_view(request):
             products_list = products_list.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
             params = params + 'q=' + search_query + '&'
 
+        order_by_string = ''
+
+        # Ordering results
+        if order_by == 'le':
+            order_by_string = 'price'
+        elif order_by == 'me':
+            order_by_string = '-price'
+        elif order_by == 'lr':
+            order_by_string = '-date'
+        elif order_by == 'mr':
+            order_by_string = 'date'
+
+        if not not order_by_string:
+            products_list = products_list.order_by(order_by_string)
+
+        # Pagination
         paginator = Paginator(products_list, 10)
         page = request.GET.get('page', 1)
 
@@ -64,7 +81,7 @@ def search_view(request):
         except PageNotAnInteger:
             products = paginator.page(1)
         except EmptyPage:
-            products = paginator.page(paginator.num_pages)
+            products = paginator.page(paginator.num_pages) 
 
         context = {
             'c': categorie,
