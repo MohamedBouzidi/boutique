@@ -18,6 +18,7 @@
             {% include 'partials/slider.html' with params=params %}
             <input type="hidden" name="q" value="{{ query }}">
             <input type="hidden" name="c" value="{{ categorie }}">
+            <input type="hidden" name="o" value="{{ order }}">
             <br><br>
             <input type="submit" class="btn btn-block btn-success" id="sidebar-submit" value="Apply">
         </form>

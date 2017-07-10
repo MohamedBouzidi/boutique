@@ -87,6 +87,7 @@ def search_view(request):
         context = {
             'c': categorie,
             'q': search_query,
+            'o': order_by,
             'type': type_id,
             'categories': Categorie.objects.all(),
             'types': Type.objects.all(),
