@@ -41,5 +41,15 @@ $("document").ready(function () {
             }
         });
     });
+
+    $("#sidebar-submit").on('click', function (e) {
+        e.preventDefault();
+        var price_range = $("#price").val();
+        var type_id = $("#type").val();
+        var $form = $("#sidebar-form");
+        var url = $form.attr('action') + 't=' + type_id + '&p=' + price_range; 
+        $form.attr('action', url);
+        $form.submit();
+    });
 });
 

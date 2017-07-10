@@ -13,12 +13,12 @@ def search_view(request):
     if request.method == 'GET':
         try:
             categorie_id = int(request.GET.get('c', 0))
+            type_id = int(request.GET.get('t', 0))
         except ValueError:
             return HttpResponseRedirect(reverse_lazy('index'))
 
         search_query = request.GET.get('q', '')
         order_by = request.GET.get('o', 'a')
-        type_id = request.GET.get('t', '')
         price_range = request.GET.get('p', '10,1000')
         price_range_list = price_range.split(',')
 
@@ -45,7 +45,7 @@ def search_view(request):
         categorie = categorie_id or None
         params = ''
 
-        if not not type_id:
+        if type_id != 0:
             products_list = products_list.filter(type=Type.objects.get(pk=type_id))
             params = params + 't=' + str(type_id) + '&'
 
@@ -71,6 +71,7 @@ def search_view(request):
 
         if not not order_by_string:
             products_list = products_list.order_by(order_by_string)
+            params = params + 'o=' + order_by + '&'
 
         # Pagination
         paginator = Paginator(products_list, 10)

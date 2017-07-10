@@ -1,4 +1,4 @@
-<b>€ 10</b> <input id="ex2" type="text" class="span2" value="" data-slider-step="5" name="p"/> <b>€ 1000</b>
+<b>€ 10</b> <input type="text" class="span2" value="" data-slider-step="5" id="price" name="p" /> <b>€ 1000</b>
 
 <script>
     function debounce(callback, duration) {
@@ -9,7 +9,7 @@
       }
     }
 
-    $("#ex2").slider({
+    $("#price").slider({
         min: 10, 
         max: 1000, 
         value: [10, 1000], 

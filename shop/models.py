@@ -28,7 +28,7 @@ class BusinessUser(models.Model):
 
     def as_json(self):
         return dict(name=self.user.username, email=self.user.email, password=self.user.password,
-                    description=self.description, picture=self.picture, type=self.type)
+                    description=self.description, picture=self.picture.url, type=self.type)
 
 
 class Boutique(models.Model):
@@ -44,8 +44,8 @@ class Boutique(models.Model):
     phone = models.CharField(max_length=20, blank=True)
 
     def as_json(self):
-        return dict(name=self.name, owner=self.owner.email, processing_time=self.processing_time,
-                    address=self.address, logo=self.logo, date=str(self.date), description=self.description,
+        return dict(name=self.name, owner=self.owner.user.email, processing_time=self.processing_time,
+                    address=self.address, logo=self.logo.url, date=str(self.date), description=self.description,
                     facebook_link=self.facebook_link, instagram_link=self.instagram_link, phone=self.phone)
 
     class Meta:
@@ -94,7 +94,7 @@ class Product(models.Model):
     type = models.ForeignKey(Type, on_delete=models.CASCADE)
 
     def as_json(self):
-        return dict(name=self.name, image=self.image, price=self.price,
+        return dict(name=self.name, image=self.image.url, price=self.price,
                     description=self.description, date=str(self.date), active=self.active, 
                     quantite=self.quantite, boutique=self.boutique.as_json(), 
                     categorie=self.categorie.as_json(), type=self.type.as_json())

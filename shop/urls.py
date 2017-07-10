@@ -34,4 +34,7 @@ urlpatterns = [
     # User URLs
     url(r'^account/edit$', views.BusinessUserUpdateView.as_view(), name='edit_user'),
     url(r'^account/delete$', views.BusinessUserDeleteView.as_view(), name='delete_user'),
+
+    # test URLs: API for Backbone
+    url(r'^api/products/(?P<pk>[0-9]+)$', views.products_api_view, name='products_api'), 
 ]
