@@ -17,6 +17,15 @@ def search_view(request):
         except ValueError:
             return HttpResponseRedirect(reverse_lazy('index'))
 
+        categorie_exists = Categorie.objects.filter(pk=categorie_id).exists()
+        type_exists = Type.objects.filter(pk=type_id).exists()
+
+        if not categorie_exists:
+            categorie_id = 0
+
+        if not type_exists:
+            type_id = 0
+
         search_query = request.GET.get('q', '')
         order_by = request.GET.get('o', 'a')
         price_range = request.GET.get('p', '10,1000')
@@ -35,15 +44,24 @@ def search_view(request):
             boutiques = Boutique.objects.exclude(owner=request.user.businessuser)
         else:
             boutiques = Boutique.objects.all()
-            
-        products_list = Product.objects.filter(
-            Q(boutique__in=boutiques),
-            Q(active=True),
-            Q(price__range=[price_min, price_max])
-        )
 
-        categorie = categorie_id or None
         params = ''
+
+        if not not search_query:
+            products_list = Product.objects.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+            params = params + 'q=' + search_query + '&'
+        else:
+            products_list = Product.objects.filter(
+                Q(boutique__in=boutiques),
+                Q(active=True)
+            )
+
+        # Grab product ids
+        products_ids_dict = products_list.values('id')
+        products_ids = [product['id'] for product in products_ids_dict]
+
+        if price_min and price_max:
+            products_list = products_list.filter(price__range=[price_min, price_max])
 
         if type_id != 0:
             products_list = products_list.filter(type=Type.objects.get(pk=type_id))
@@ -53,13 +71,9 @@ def search_view(request):
             products_list = products_list.filter(categorie=Categorie.objects.get(pk=categorie_id))
             params = params + 'c=' + str(categorie_id) + '&'
 
-        if not not search_query:
-            products_list = products_list.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
-            params = params + 'q=' + search_query + '&'
-
+        # Ordering results
         order_by_string = ''
 
-        # Ordering results
         if order_by == 'le':
             order_by_string = 'price'
         elif order_by == 'me':
@@ -82,14 +96,29 @@ def search_view(request):
         except PageNotAnInteger:
             products = paginator.page(1)
         except EmptyPage:
-            products = paginator.page(paginator.num_pages) 
+            products = paginator.page(paginator.num_pages)
 
+            
+        # Setting up categorie list
+        categorie_list = Categorie.objects.all()
+        categories = []
+
+        for categorie_obj in categorie_list:
+            count = categorie_obj.product_set.filter(pk__in=products_ids).count()
+            if count:            
+                categories.append({
+                    'id': categorie_obj.id,
+                    'label': categorie_obj.label,
+                    'count': count
+                })
+
+        # Context data
         context = {
-            'c': categorie,
+            'c': categorie_id,
             'q': search_query,
             'o': order_by,
             'type': type_id,
-            'categories': Categorie.objects.all(),
+            'categories': categories,
             'types': Type.objects.all(),
             'params': params,
             'products': products

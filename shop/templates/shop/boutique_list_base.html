@@ -13,6 +13,7 @@
                         <p>{{ user.email }}</p>
                         <span>{{ user.boutique_set.count }} boutiques(s)</span><br><br>
                         <div class="btn-group" role="group">
+                            {% if user.boutique_set.count %}{% endif %}
                             <a href="{% url 'new_boutique' %}" id="ajouter" class="btn btn-default">Ajouter</a>
                             <a href="{% url 'list_boutique' %}" id="lister" class="btn btn-default">Boutiques</a>
                         </div>

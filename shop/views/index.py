@@ -21,7 +21,14 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['categories'] = Categorie.objects.all()
+
+        categorie_list = Categorie.objects.all()
+        categories = []
+        for categorie in categorie_list:
+            if categorie.product_set.count():
+                categories.append(categorie)
+
+        context['categories'] = categories
         context['types'] = Type.objects.all()
         context['rows'] = range(0, self.get_queryset().count(), 3)
         return context
