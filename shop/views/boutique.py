@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView
 from django.views.generic.edit import UpdateView, DeleteView
 
+from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
@@ -60,8 +61,26 @@ class BoutiqueUpdateView(UpdateView):
     success_url = reverse_lazy('index')
     form_class = BoutiqueForm
 
+    def get(self, request, *args, **kwargs):
+        boutique = Boutique.objects.get(pk=kwargs['pk'])
+        if request.user != boutique.owner.user:
+            return HttpResponseRedirect(reverse_lazy('index'))
+        return super(BoutiqueUpdateView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        boutique = Boutique.objects.get(pk=kwargs['pk'])
+        if request.user != boutique.owner.user:
+            return HttpResponseRedirect(reverse_lazy('index'))
+        return super(BoutiqueUpdateView, self).post(request, *args, **kwargs)
+
 
 @method_decorator(login_required, name='dispatch')
 class BoutiqueDeleteView(DeleteView):
     model = Boutique
     success_url = reverse_lazy('index')
+
+    def post(self, request, *args, **kwargs):
+        boutique = Boutique.objects.get(pk=kwargs['pk'])
+        if request.user != boutique.owner.user:
+            return HttpResponseRedirect(reverse_lazy('index'))
+        return super(BoutiqueDeleteView, self).post(request, *args, **kwargs)
