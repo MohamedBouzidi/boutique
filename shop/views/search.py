@@ -79,9 +79,9 @@ def search_view(request):
         elif order_by == 'me':
             order_by_string = '-price'
         elif order_by == 'lr':
-            order_by_string = '-date'
-        elif order_by == 'mr':
             order_by_string = 'date'
+        elif order_by == 'mr':
+            order_by_string = '-date'
 
         if not not order_by_string:
             products_list = products_list.order_by(order_by_string)

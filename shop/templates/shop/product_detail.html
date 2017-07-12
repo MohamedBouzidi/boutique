@@ -4,13 +4,31 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-4">
-                    <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive" id="image-primary">
+                <div class="col-md-4 text-center">
+                    <div class="image-frame">
+                        {% if is_owner %}
+                        <div class="image-controls">
+                            <span class="edit-image"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            <span class="delete-image">&times;</span>
+                        </div>
+                        {% endif %}
+                        <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive" id="image-primary" data-picture-id="main">
+                    </div>
                     <div class="extra-images">
+                        {% if is_owner %}
+                        <br>
+                        <form action="{% url 'edit_product' product.boutique.id product.id %}" method="post" enctype="multipart/form-data" class="input-group image-form">
+                            {% csrf_token %}
+                          <input type="file" class="form-control" name="picture">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Save</button>
+                          </span>
+                        </form><br>
+                        {% endif %}
                         <div class="row">
                         {% for picture in pictures %}
                             <div class="col-md-4">
-                                <img src="{{ MEDIA_URL }}{{ picture.name.url }}" alt="{{ product.name }}" class="img-responsive image-secondary">
+                                <img src="{{ MEDIA_URL }}{{ picture.name.url }}" alt="{{ product.name }}" class="img-responsive image-secondary" data-picture-id="{{ picture.id }}">
                             </div>        
                         {% endfor %}
                         </div>
@@ -30,14 +48,41 @@
     </div>
 
     <script>
-        $(".image-secondary").on('click', function (e) {
-            e.preventDefault();
+        var $imageForm = $(".image-form");
+        var $deleteButton = $(".delete-image");
+        var $editButton = $(".edit-image");
+
+        $imageForm.hide();
+        $deleteButton.hide();
+
+        $editButton.on('click', function () {
+            $imageForm.toggle();
+        });
+
+        $(".image-secondary").on('click', function () {
             $this = $(this);
             $primary = $("#image-primary");
+
             $primary_src = $primary.attr("src");
+            $primary_id = $primary.attr("data-picture-id");
+
             $secondary_src = $this.attr("src");
+            $secondary_id = $this.attr("data-picture-id");
+
             $primary.attr("src", $secondary_src);
+            $primary.attr("data-picture-id", $secondary_id);
+
             $this.attr("src", $primary_src);
+            $this.attr("data-picture-id", $primary_id);
+
+            $deleteButton.show();
+            $editButton.hide();
+            $imageForm.hide();
+
+            if ($primary.attr("data-picture-id") === "main") {
+                $deleteButton.hide();
+                $editButton.show();
+            }
         });
         // $(".add-extra-picture").on('click', function (e) {
         //     e.preventDefault();

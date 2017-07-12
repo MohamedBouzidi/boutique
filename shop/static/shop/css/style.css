@@ -85,3 +85,34 @@
     background-color: #cceecc;
     z-index: 2;
 }
+
+.image-controls {
+    float: right;
+}
+
+.image-controls .delete-image {
+    font-size: 1.8em;
+    padding: 4px;
+}
+
+.image-controls .delete-image:hover, .image-controls .edit-image:hover {
+    cursor: pointer;
+    color: steelblue;
+}
+
+.image-controls .edit-image {
+    font-size: 1.4em;
+    padding: 4px;
+}
+
+.price-input {
+    width: 80px;
+}
+
+.price-min {
+    float: left;
+}
+
+.price-max {
+    float: right;
+}

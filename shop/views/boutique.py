@@ -79,6 +79,12 @@ class BoutiqueDeleteView(DeleteView):
     model = Boutique
     success_url = reverse_lazy('index')
 
+    def get(self, request, *args, **kwargs):
+        boutique = Boutique.objects.get(pk=kwargs['pk'])
+        if request.user != boutique.owner.user:
+            return HttpResponseRedirect(reverse_lazy('index'))
+        return super(BoutiqueDeleteView, self).get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         boutique = Boutique.objects.get(pk=kwargs['pk'])
         if request.user != boutique.owner.user:

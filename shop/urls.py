@@ -15,8 +15,12 @@ urlpatterns = [
     # AJAX URLs
     url(r'^search$', views.search_view, name='search'),
     
-    # Product URLs
+    # Product Picture URLs
     url(r'^(?P<boutique_id>\d+)/products/(?P<product_id>\d+)/picture/new$', views.ProductPictureCreateView.as_view(), name='new_product_picture'),
+    url(r'^(?P<boutique_id>\d+)/products/(?P<product_id>\d+)/picture/(?P<pk>\d+)/edit$', views.ProductPictureUpdateView.as_view(), name='edit_product_picture'),
+    url(r'^(?P<boutique_id>\d+)/products/(?P<product_id>\d+)/picture/(?P<pk>\d+)/delete$', views.ProductPictureDeleteView.as_view(), name='delete_product_picture'),
+
+    # Product URLs
     url(r'^(?P<boutique_id>\d+)/products/new$', views.ProductCreateView.as_view(), name='new_product'),
     url(r'^(?P<boutique_id>\d+)/products/(?P<pk>\d+)/edit$', views.ProductUpdateView.as_view(), name='edit_product'),
     url(r'^(?P<boutique_id>\d+)/products/(?P<pk>\d+)/delete$', views.ProductDeleteView.as_view(), name='delete_product'),
