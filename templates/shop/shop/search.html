@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-sm-6">
+            <div class="affix">
+                {% include 'partials/search.html' with categories=categories types=types query=q categorie=c order=o %}
+            </div>
+        </div>
+        {% if products %}
+            <div class="col-md-8 col-sm-6" id="product_list">
+                <div class="row">
+                    {% for product in products %}
+                        <div class="col-md-4 col-sm-12">
+                            {% include 'partials/product.html' with product=product %}
+                        </div>
+                        {% if forloop.counter in rows %}
+                        </div>
+                        <div class="row">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% include 'partials/paginator.html' with products=products params=params %}
+            </div>
+
+            {% load static %}
+            <script src="{% static 'shop/js/search.js' %}"></script>
+        {% else %}
+                <div class="col-md-8 col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>No products matching search query.</p>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+{% endblock %}

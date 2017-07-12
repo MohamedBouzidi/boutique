@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <div class="image-frame">
+                        {% if is_owner %}
+                        <div class="image-controls">
+                            <span class="edit-image"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                            <span class="delete-image">&times;</span>
+                        </div>
+                        {% endif %}
+                        <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive" id="image-primary" data-picture-id="main">
+                    </div>
+                    <div class="extra-images">
+                        {% if is_owner %}
+                        <br>
+                        <form action="{% url 'edit_product' product.boutique.id product.id %}" method="post" enctype="multipart/form-data" class="input-group image-form">
+                            {% csrf_token %}
+                          <input type="file" class="form-control" name="picture">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Save</button>
+                          </span>
+                        </form><br>
+                        {% endif %}
+                        <div class="row">
+                        {% for picture in pictures %}
+                            <div class="col-md-4">
+                                <img src="{{ MEDIA_URL }}{{ picture.name.url }}" alt="{{ product.name }}" class="img-responsive image-secondary" data-picture-id="{{ picture.id }}">
+                            </div>        
+                        {% endfor %}
+                        </div>
+                        {% if is_owner %}
+                            <a href="{% url 'new_product_picture' product.boutique.id product.id %}" class="add-extra-picture" data-product-id="{{ product.id }}">&plus;</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h2>{{ product.name }}</h2>
+                    <h4>{{ product.categorie.label }}</h4>
+                    <span class="label label-info">{{ product.price }}</span><br><br>
+                    <p>{{ product.description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var $imageForm = $(".image-form");
+        var $deleteButton = $(".delete-image");
+        var $editButton = $(".edit-image");
+
+        $imageForm.hide();
+        $deleteButton.hide();
+
+        $editButton.on('click', function () {
+            $imageForm.toggle();
+        });
+
+        $(".image-secondary").on('click', function () {
+            $this = $(this);
+            $primary = $("#image-primary");
+
+            $primary_src = $primary.attr("src");
+            $primary_id = $primary.attr("data-picture-id");
+
+            $secondary_src = $this.attr("src");
+            $secondary_id = $this.attr("data-picture-id");
+
+            $primary.attr("src", $secondary_src);
+            $primary.attr("data-picture-id", $secondary_id);
+
+            $this.attr("src", $primary_src);
+            $this.attr("data-picture-id", $primary_id);
+
+            $deleteButton.show();
+            $editButton.hide();
+            $imageForm.hide();
+
+            if ($primary.attr("data-picture-id") === "main") {
+                $deleteButton.hide();
+                $editButton.show();
+            }
+        });
+        // $(".add-extra-picture").on('click', function (e) {
+        //     e.preventDefault();
+        //     $.ajaxSetup({ 
+        //          beforeSend: function(xhr, settings) {
+        //              function getCookie(name) {
+        //                  var cookieValue = null;
+        //                  if (document.cookie && document.cookie != '') {
+        //                      var cookies = document.cookie.split(';');
+        //                      for (var i = 0; i < cookies.length; i++) {
+        //                          var cookie = jQuery.trim(cookies[i]);
+        //                          // Does this cookie string begin with the name we want?
+        //                          if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        //                              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        //                              break;
+        //                          }
+        //                      }
+        //                  }
+        //                  return cookieValue;
+        //              }
+        //              if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        //                  // Only send the token to relative URLs i.e. locally.
+        //                  xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        //              }
+        //          } 
+        //     });
+        //     var $this = $(this);
+        //     var productId = $this.attr("data-product-id");
+        //     $.ajax({
+        //         url: "ajax/" + productId + "/picture/new",
+        //         type: "POST",
+        //         data: {
+
+        //         },
+        //         success: function (data) {
+        //             console.log(data);
+        //         }
+        //     })
+        // }); 
+    </script>
+{% endblock %}

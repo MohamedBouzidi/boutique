@@ -1,0 +1,47 @@
+<input type="text" class="span2" value="" data-slider-step="5" id="price" name="p" />
+<br><br>
+<div class="price-min">
+  <input type="number" id="price-min" class="price-input form-control" name="price-min" value="10">
+</div>
+<div class="price-max">
+  <input type="number" id="price-max" class="price-input form-control" name="price-max" value="1000">
+</div>
+
+<script>
+    function debounce(callback, duration) {
+      var timer;
+      return function () {
+        clearTimeout(timer);
+        timer = setTimeout(callback, duration);
+      }
+    }
+
+    $("#price").slider({
+        min: 10, 
+        max: 1000, 
+        value: [10, 1000], 
+        focus: true
+    });
+
+    var $slider = $("#price");
+    var $inputMin = $("#price-min");
+    var $inputMax = $("#price-max");
+
+    $slider.on('slide', function () {
+      var value = $slider.slider('getValue');
+      $inputMin.val(value[0]);
+      $inputMax.val(value[1]);
+    });
+
+    $inputMin.on('change', function () {
+      var value = $slider.slider('getValue');
+      value[0] = parseInt($inputMin.val());
+      $slider.slider('setValue', value);
+    });
+
+    $inputMax.on('change', function () {
+      var value = $slider.slider('getValue');
+      value[1] = parseInt($inputMax.val());
+      $slider.slider('setValue', value);
+    });
+</script>

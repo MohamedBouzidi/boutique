@@ -1,7 +1,6 @@
 import os
 from django.db import models
 from django.conf import settings
-from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
 from django.core.validators import MinValueValidator
@@ -37,7 +36,7 @@ class Boutique(models.Model):
     processing_time = models.FloatField(default=0.0)
     address = models.CharField(max_length=255,  blank=False)
     logo = models.ImageField(upload_to=get_boutique_logo_link)
-    date = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(auto_now_add=True)
     description = models.TextField(blank=True)
     facebook_link = models.CharField(max_length=255, blank=True)
     instagram_link = models.CharField(max_length=255, blank=True)
@@ -86,7 +85,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to=get_product_image_link)
     price = models.FloatField(validators=[MinValueValidator(0.0)])
     description = models.TextField(blank=True)
-    date = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=False)
     quantite = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     boutique = models.ForeignKey(Boutique, on_delete=models.CASCADE)
@@ -112,4 +111,4 @@ class Product(models.Model):
 class Picture(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     name = models.ImageField(upload_to=get_product_extra_image_link)
-    date = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(auto_now_add=True)

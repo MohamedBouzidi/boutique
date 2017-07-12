@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                <div class="affix">
+                    {% include 'partials/search.html' with categories=categories types=types %}
+                </div>
+            </div>
+            {% if products %}
+                <div class="col-md-8 col-sm-6" id="product_list">
+                    <div class="row">
+                        {% for product in products %}
+                            <div class="col-md-4 col-sm-12">
+                                {% include 'partials/product.html' with product=product %}
+                            </div>
+                            {% if forloop.counter in rows %}
+                            </div>
+                            <div class="row">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+                        {% if is_paginated %}
+                            <ul class="pagination">
+                                <li><a href="#">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                            </ul>
+                            <ul class="pagination">
+                                {% if page_obj.has_previous  %}
+                                    <li>
+                                    <a href="{% url 'index' %}?page={{ page_obj.previous_page_number }}">previous</a>                                    
+                                    </li>
+                                {% endif %}
+                                {% for page in page_obj.paginator.page_range %}
+                                    <li><a href="{% url 'index' %}?page={{ page }}">{{ page }}</a></li>
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li>
+                                        <a href="{% url 'index' %}?page={{ page_obj.next_page_number }}">next</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% load static %}
+                <script src="{% static 'shop/js/search.js' %}"></script>
+            {% else %}
+                    <div class="col-md-8 col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <p>Pas de produits disponibles.</p>
+                            </div>
+                        </div>
+                    </div>
+            {% endif %}
+        </div>
+{% endblock %}

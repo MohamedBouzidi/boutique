@@ -1,0 +1,71 @@
+<div class="panel panel-default">
+    <div class="panel-heading text-center">
+        <h4>New Business User</h4>
+        <div class="btn-group" role="group">
+            <!-- <button class="btn btn-default" data-form-id="businessuser_form" id="businessuser" disabled>BusinessUser</button>
+            <button class="btn btn-default" data-form-id="new_boutique_form" id="boutique" disabled>Boutique</button> -->
+        </div>
+    </div>
+    <div class="panel-body">
+        <form action="{% url 'business_register' %}" id="businessuser_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" cols="30" rows="10" class="form-control" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="picture">Picture</label>
+                <input type="file" required id="picture" name="picture" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select name="type" id="type" class="form-control">
+                    <option value="ENTERPRISE" selected>Entreprise</option>
+                    <option value="INDIVIDUAL">Particulier</option>
+                </select>
+            </div>
+            <input type="submit" value="Create" class="btn btn-default pull-right" id="next">
+        </form>
+<!--         <form action="{#% url "new_boutique" %#}" method="post" id="new_boutique_form" enctype="multipart/form-data">
+            {#% csrf_token %#}
+            {# form.as_p #}
+            <input type="submit" value="Submit" id="submit" class="btn btn-success pull-right">
+            <button type="button" class="btn btn-default" id="back">Back</button>
+        </form> -->
+    </div>
+</div>
+
+<script>
+    // $("document").ready(function () {
+    //     var $businessuserForm = $("#businessuser_form");
+    //     var $boutiqueForm = $("#new_boutique_form");
+
+    //     $("#new_boutique_form").hide();
+    //     $("#businessuser").addClass("active");
+
+    //     $("#next").on('click', function (e) {
+    //         e.preventDefault();
+    //         $("#boutique").toggleClass("active");
+    //         $("#businessuser").toggleClass("active");
+    //         $(this).parent().hide();
+    //         $("#new_boutique_form").show();
+    //     });
+
+    //     $("#back").on('click', function () {
+    //         $("#boutique").toggleClass("active");
+    //         $("#businessuser").toggleClass("active");
+    //         $(this).parent().hide();
+    //         $("#businessuser_form").show();
+    //     });
+
+    //     $("#submit").on('click', function (e) {
+    //         e.preventDefault();
+    //         $boutiqueForm.submit();
+    //         $businessuserForm.submit();
+    //     });
+    // });
+</script>

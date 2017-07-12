@@ -1,0 +1,43 @@
+<div class="panel panel-default sidebar">
+    <div class="panel-body">
+        <h3>Tous les catégories</h3>
+        {% for categorie in categories %}
+        <a href="{% url 'search' %}?{{ params }}c={{ categorie.id }}" name="categorie">{{ categorie.label }} (
+        {% if categorie.count %}
+            {{ categorie.count }}
+        {% else %}
+            {{ categorie.product_set.count }}
+        {% endif %}
+        )</a>
+        {% endfor %}
+        <a href="{% url 'search' %}?{{ params }}c=0" name="categorie">Any Categorie</a>
+        <hr>
+        <form action="{% url 'search' %}" method="get">
+            <h3>Type</h3>
+            <select id="type" class="form-control" name="t">
+                <option value="0">--------</option>
+                {% for type in types %}
+                    <option value="{{ type.id }}">{{ type.label }}</option>
+                {% endfor %}
+            </select>
+            <hr>
+            <h3>Prix</h3>
+            {% include 'partials/slider.html' with params=params %}
+
+            {% if query %}
+            <input type="hidden" name="q" value="{{ query }}">
+            {% endif %}
+            
+            {% if order %}
+            <input type="hidden" name="o" value="{{ order }}">
+            {% endif %}
+            
+            {% if categorie %}
+            <input type="hidden" name="c" value="{{ categorie }}">
+            {% endif %}
+
+            <br><br>
+            <input type="submit" class="btn btn-block btn-success" value="Apply">
+        </form>
+    </div>
+</div>

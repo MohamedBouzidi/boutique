@@ -45,7 +45,7 @@ class ProductCreateView(CreateView):
 @method_decorator(login_required, name='dispatch')
 class ProductUpdateView(UpdateView):
     model = Product
-    fields = ['name', 'price', 'image', 'description', 'active', 'quantite', 'categorie']
+    fields = ['name', 'price', 'image', 'description', 'active', 'quantite', 'categorie', 'type']
     # form_class = ProductForm
 
     def get(self, request, *args, **kwargs):
@@ -62,10 +62,14 @@ class ProductUpdateView(UpdateView):
         instance = self.get_object()
         form = ProductForm(request.POST, request.FILES, instance=instance)
 
+        print(instance.__dict__)
+
         if form.is_valid():
             obj = form.save(commit=False)
             obj.save()
             return super(ProductUpdateView, self).form_valid(form)
+
+        return super(ProductUpdateView, self).post(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse_lazy('detail_boutique', kwargs={'pk': self.kwargs['boutique_id']})

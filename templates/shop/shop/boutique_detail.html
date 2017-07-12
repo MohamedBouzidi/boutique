@@ -1,0 +1,49 @@
+{% extends 'shop/boutique_detail_base.html' %}
+
+{% block section %}
+    {% if products %}
+    <h3>Products</h3>
+    <table class="table table-hover">
+        <thead>
+            <th>Etat</th>
+            <th>Titre</th>
+            <th>Quantite</th>
+            <th>Prix</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>
+                        {% if product.active %}
+                        <span class="label label-info">Active</span>
+                        {% else %}
+                        <span class="label label-warning">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td><img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive-small">{{ product.name }}</td>
+                    <td>{{ product.quantite }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a href="{% url 'detail_product' product.boutique.id product.id %}" class="btn btn-default btn-sm" id="detail-url">Detail</a>
+                            <a href="{% url 'edit_product' product.boutique.id product.id %}" class="btn btn-default btn-sm" id="edit-url">Edit</a>
+                            <a href="{% url 'delete_product' product.boutique.id product.id %}" class="btn btn-default btn-sm delete" data-product-id="{{ product.id }}" data-boutique-id="{{ product.boutique.id }}" id="delete-url">Delete</a>
+                            <a href="{% url 'dublicate_product' product.boutique.id product.id %}" class="btn btn-default btn-sm dublicate" data-boutique-id="{{ product.boutique.id }}" data-product-id="{{ product.id }}" id="dublicate-url">Dublicate</a>
+                            <a href="{% url 'state_product' product.boutique.id product.id %}" class="btn btn-default btn-sm state" data-boutique-id="{{ product.boutique.id }}" data-product-id="{{ product.id }}" data-product-active="{{ product.active }}" id="state-url">
+                                {% if product.active %}
+                                    Desactivate
+                                {% else %}
+                                    Activate
+                                {% endif %}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No products yet.</p>
+    {% endif %}
+{% endblock %}
