@@ -33,13 +33,13 @@ class ProductForm(ModelForm):
         model = Product
         fields = ['name', 'price', 'image', 'description', 'active', 'quantite', 'categorie', 'type']
         widgets = {
-            'name': TextInput(attrs={'class': 'form-control'}),
-            'price': TextInput(attrs={'class': 'form-control'}),
-            'image': FileInput(attrs={'class': 'form-control'}),
-            'description': Textarea(attrs={'class': 'form-control'}),
-            'quantite': TextInput(attrs={'class': 'form-control'}),
-            'categorie': Select(attrs={'class': 'form-control'}),
-            'type': Select(attrs={'class': 'form-control'}),
+            'name': TextInput(attrs={'class': 'form-control', 'id': 'name'}),
+            'price': TextInput(attrs={'class': 'form-control', 'id': 'price'}),
+            'image': FileInput(attrs={'class': 'form-control', 'id': 'image'}),
+            'description': Textarea(attrs={'class': 'form-control', 'id': 'description'}),
+            'quantite': TextInput(attrs={'class': 'form-control', 'id': 'quantite'}),
+            'categorie': Select(attrs={'class': 'form-control', 'id': 'categorie'}),
+            'type': Select(attrs={'class': 'form-control', 'id': 'type'}),
         }
 
 

@@ -1,13 +1,72 @@
 {% extends 'shop/boutique_list_base.html' %}
 
 {% block section %}
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <p>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" class="form-control" value="{{ request.user.username }}">
-        </p>
-        {{ form.as_p }}
-        <input type="submit" class="btn btn-default" value="Submit">
+    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+        {% if form.errors %}
+            {% for field in form %}
+                {% if field.errors %}
+                <div class="alert alert-danger">
+                  {{ field.name }}
+                  {% for error in field.errors %}
+                  <strong>{{ error|escape }}</strong>
+                  {% endfor %}
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+      <fieldset>
+        <div class="form-group">
+          <label for="username" class="col-md-2 control-label">Username</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" id="name" name="username" value="{{ request.user.username }}" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="picture" class="col-md-2 control-label">Picture</label>
+          <div class="col-md-10">
+            <input type="text" readonly="" class="form-control" placeholder="Browse...">
+            {{ form.picture }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description" class="col-md-2 control-label">Description</label>
+          <div class="col-md-10">
+            <textarea class="form-control" rows="7" name="{{ form.description.name }}" id="description">{{ form.description.value }}</textarea>
+            <span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="type" class="col-md-2 control-label">Type</label>
+          <div class="col-md-10">
+            <select class="form-control" name="{{ form.type.name }}" id="type">
+              {% for value, text in form.type.field.choices %}
+                  {% if value == form.type.value %}
+                  <option value="{{ value }}" selected>{{ text }}</option>
+                  {% else %}
+                  <option value="{{ value }}">{{ text }}</option>
+                  {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>  
+
+        <div class="form-group">
+          <div class="col-md-10 col-md-offset-2">
+            <button type="button" class="btn btn-default btn-raised">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+          </div>
+        </div>
+      </fieldset>
     </form>
 {% endblock %}

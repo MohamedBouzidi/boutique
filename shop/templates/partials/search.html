@@ -1,6 +1,6 @@
 <div class="panel panel-default sidebar">
     <div class="panel-body">
-        <h3>Tous les catégories</h3>
+        <h3>Categories</h3>
         {% for categorie in categories %}
         <a href="{% url 'search' %}?{{ params }}c={{ categorie.id }}" name="categorie">{{ categorie.label }} (
         {% if categorie.count %}
@@ -13,23 +13,32 @@
         <a href="{% url 'search' %}?{{ params }}c=0" name="categorie">Any Categorie</a>
         <hr>
         <form action="{% url 'search' %}" method="get">
-            <h3>Type</h3>
-            <select id="type" class="form-control" name="t">
-                <option value="0">--------</option>
-                {% for type in types %}
-                    <option value="{{ type.id }}">{{ type.label }}</option>
-                {% endfor %}
+            <div class="form-group">
+                <h3>Type</h3>
+                <select id="type" class="form-control" name="t">
+                    <option value="0">Any Type</option>
+                    {% for type in types %}
+                        <option value="{{ type.id }}">{{ type.label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <hr>
+
+            <h3>Sort by</h3>
+            <select name="o" id="order" class="form-control">
+              <option value="a" selected>No Order</option>
+              <option value="me">Most expensive</option>
+              <option value="le">Least expensive</option>
+              <option value="mr">Newest</option>
+              <option value="lr">Oldest</option>
             </select>
             <hr>
+
             <h3>Prix</h3>
             {% include 'partials/slider.html' with params=params %}
 
             {% if query %}
             <input type="hidden" name="q" value="{{ query }}">
-            {% endif %}
-            
-            {% if order %}
-            <input type="hidden" name="o" value="{{ order }}">
             {% endif %}
             
             {% if categorie %}

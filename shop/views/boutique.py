@@ -58,8 +58,7 @@ class BoutiqueDetailView(DetailView):
 @method_decorator(login_required, name='dispatch')
 class BoutiqueUpdateView(UpdateView):
     model = Boutique
-    success_url = reverse_lazy('index')
-    form_class = BoutiqueForm
+    fields = ['name', 'processing_time', 'address', 'logo', 'description', 'facebook_link', 'instagram_link', 'phone']
 
     def get(self, request, *args, **kwargs):
         boutique = Boutique.objects.get(pk=kwargs['pk'])
@@ -71,7 +70,21 @@ class BoutiqueUpdateView(UpdateView):
         boutique = Boutique.objects.get(pk=kwargs['pk'])
         if request.user != boutique.owner.user:
             return HttpResponseRedirect(reverse_lazy('index'))
+        
+        instance = Boutique.objects.get(pk=kwargs['pk'])
+        form = BoutiqueForm(request.POST, request.FILES, instance=instance)
+
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            print(instance.__dict__)
+            return super(BoutiqueUpdateView, self).form_valid(form)
+
         return super(BoutiqueUpdateView, self).post(request, *args, **kwargs)
+
+
+    def get_success_url(self):
+        return reverse_lazy('list_boutique')
 
 
 @method_decorator(login_required, name='dispatch')

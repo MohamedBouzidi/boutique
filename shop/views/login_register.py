@@ -68,7 +68,7 @@ def logout_view(request):
 class BusinessUserUpdateView(UpdateView):
     model = BusinessUser
     success_url = reverse_lazy('list_boutique')
-    form_class = BusinessUserForm
+    fields = ['picture', 'description', 'type']
 
     def form_valid(self, form):
         obj = form.save(commit=False)

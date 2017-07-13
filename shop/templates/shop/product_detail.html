@@ -45,6 +45,9 @@
                         </div>
                         <div class="col-md-4">
                             <h2 class="product-price pull-right">{{ product.price }} DT</h2>
+                            {% if not is_owner %}
+                            <a href="{% url 'messages' product.boutique.owner.user.username %}" class="btn btn-sm btn-success pull-right"><i class="fa fa-envelope"></i> <b>Contact Owner</b></a>
+                            {% endif %}
                         </div>
                     </div>
                     <hr>

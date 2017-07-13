@@ -12,15 +12,15 @@
                     <h2>{{ user.username }}</h2>
                     <p>{{ user.email }}</p>
                     <span>{{ user.boutique_set.count }} boutiques(s)</span><br><br>
-                    <div class="btn-group" role="group">
-                        <a href="{% url 'new_boutique' %}" id="ajouter" class="btn btn-default">Ajouter</a>
-                        <a href="{% url 'list_boutique' %}" id="lister" class="btn btn-default">Boutiques</a>
+                    <div class="btn-group btn-group-justified btn-group-raised" role="group">
+                        <a href="{% url 'new_boutique' %}" id="ajouter" class="btn btn-primary">Ajouter</a>
+                        <a href="{% url 'list_boutique' %}" id="lister" class="btn btn-primary">Boutiques</a>
                     </div>
                     {% if user.businessuser %}
                     <br><br>
-                    <div class="btn-group" role="group">
-                        <a href="{% url 'edit_user' %}" id="edit-user" class="btn btn-default">Edit Account</a>
-                        <a href="{% url 'delete_user' %}" id="delete-user" class="btn btn-default">Delete Account</a>
+                    <div class="btn-group btn-group-justified btn-group-raised" role="group">
+                        <a href="{% url 'edit_user' %}" id="edit-user" class="btn btn-info">Edit Account</a>
+                        <a href="{% url 'delete_user' %}" id="delete-user" class="btn btn-danger">Delete Account</a>
                     </div>
                     {% endif %}
                 </div>

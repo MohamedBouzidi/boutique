@@ -119,7 +119,7 @@ STATICFILES_FINDER = [
 LOGIN_URL = 'login'
 
 SASS_PROCESSOR_ENABLED = True
-SASS_PROCESSOR_ROOT = os.path.join('static', 'shop', 'css')
+SASS_PROCESSOR_ROOT = os.path.join('shop', 'static', 'shop', 'css')
 SASS_PROCESSOR_AUTO_INCLUDE = False
 SASS_PRECISION = 8
 

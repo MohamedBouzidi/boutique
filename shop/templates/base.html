@@ -4,12 +4,20 @@
     <meta charset="UTF-8">
     <title>Document</title>
     {% load static %}
+
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
     <link rel="stylesheet" href="{% static 'shop/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'shop/css/bootstrap-slider.min.css' %}">
     <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap-material-design.min.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/ripples.min.css' %}">
     
     {% load sass_tags %}
-    <link rel="stylesheet" href="{% sass_src 'shop/scss/theme.scss' %}">
+    <link rel="stylesheet" href="{#% sass_src 'shop/scss/theme.scss' %#}">
 
     <script src="{% static 'shop/js/jquery.min.js' %}"></script>
     <script src="{% static 'shop/js/jquery.form.min.js' %}"></script>
@@ -17,8 +25,10 @@
     <script src="{% static 'shop/js/bootstrap-slider.min.js' %}"></script>
     <script src="{% static 'shop/js/sidebar.js' %}"></script>
 
-    <script src="{% static 'shop/js/underscore-min.js' %}"></script>
-    <script src="{% static 'shop/js/backbone-min.js' %}"></script>
+    <script src="{% static 'shop/js/material.min.js' %}"></script>
+    <script src="{% static 'shop/js/ripples.min.js' %}"></script>
+    
+    <script src="{% static 'shop/js/mustache.min.js' %}"></script>
 
     {% block head %}
     {% endblock %}
@@ -32,8 +42,11 @@
     {% endif %}
     <div class="container" id="main">
         {% block content %}
-            
         {% endblock %}
     </div>
+
+    <script>
+        $.material.init();
+    </script>
 </body>
 </html>

@@ -8,9 +8,9 @@
                     <img src="{{ MEDIA_URL }}{{ boutique.logo.url }}" alt="{{ boutique.name }}" class="img-responsive-thumbnail">
                     <h2>{{ boutique.name }}</h2>
                     <span>{{ boutique.product_set.count }} produit(s)</span><br><br>
-                    <div class="btn-group" role="group">
-                        <a href="{% url 'new_product' boutique.id %}" id="ajouter" data-boutique-id="{{ boutique.id }}" class="btn btn-default">Ajouter un produit</a>
-                        <a href="{% url 'detail_boutique' boutique.id %}" id="lister" data-boutique-id="{{ boutique.id }}" class="btn btn-default">Lister les produits</a>
+                    <div class="btn-group btn-group-justified btn-group-raised" role="group">
+                        <a href="{% url 'new_product' boutique.id %}" id="ajouter" data-boutique-id="{{ boutique.id }}" class="btn btn-primary">Ajouter</a>
+                        <a href="{% url 'detail_boutique' boutique.id %}" id="lister" data-boutique-id="{{ boutique.id }}" class="btn btn-primary">Produits</a>
                     </div>
                 </div>
                 <div class="col-md-8" id="content">

@@ -116,3 +116,7 @@
 .price-max {
     float: right;
 }
+
+.navbar .navbar-nav a {
+    font-weight: bold;
+}

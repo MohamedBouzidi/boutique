@@ -1,9 +1,112 @@
 {% extends 'shop/boutique_detail_base.html' %}
 
 {% block section %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit" class="btn btn-default" />
+    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {% if form.errors %}
+          {% for field in form %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                  {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                  <div class="alert alert-danger">
+                      <strong>{{ error|escape }}</strong>
+                  </div>
+              {% endfor %}
+      {% endif %}
+
+      <fieldset>
+        <div class="form-group">
+          <label for="name" class="col-md-2 control-label">Name</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" id="name" name="{{ form.name.name }}" value="{{ form.name.value }}" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="price" class="col-md-2 control-label">Price</label>
+          <div class="col-md-10">
+            <input type="number" class="form-control" id="price" name="{{ form.price.name }}" value="{{ form.price.value }}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-10">
+            <div class="togglebutton">
+              <label>
+                {% if form.active.value %}
+                <input type="checkbox" name="active" checked> Active
+                {% else %}
+                <input type="checkbox" name="active"> Active
+                {% endif %}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="image" class="col-md-2 control-label">File</label>
+          <div class="col-md-10">
+            <input type="text" readonly="" class="form-control" placeholder="Browse...">
+            {{ form.image }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description" class="col-md-2 control-label">Textarea</label>
+          <div class="col-md-10">
+            <textarea class="form-control" rows="7" name="{{ form.description.name }}" id="description">{{ form.description.value }}</textarea>
+            <span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="quantite" class="col-md-2 control-label">Quantite</label>
+          <div class="col-md-10">
+            <input type="number" class="form-control" name="{{ form.quantite.name }}" value="{{ form.quantite.value }}" id="quantite" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="categorie" class="col-md-2 control-label">Categorie</label>
+          <div class="col-md-10">
+            <select class="form-control" name="{{ form.categorie.name }}" id="categorie">
+              {% for value, text in form.categorie.field.choices %}
+                  {% if value == form.categorie.value %}
+                  <option value="{{ value }}" selected>{{ text }}</option>
+                  {% else %}
+                  <option value="{{ value }}">{{ text }}</option>
+                  {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="type" class="col-md-2 control-label">Type</label>
+          <div class="col-md-10">
+            <select class="form-control" name="{{ form.type.name }}" id="type">
+              {% for value, text in form.type.field.choices %}
+                  {% if value == form.type.value %}
+                  <option value="{{ value }}" selected>{{ text }}</option>
+                  {% else %}
+                  <option value="{{ value }}">{{ text }}</option>
+                  {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-10 col-md-offset-2">
+            <button type="button" class="btn btn-default btn-raised">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+          </div>
+        </div>
+      </fieldset>
     </form>
 {% endblock %}

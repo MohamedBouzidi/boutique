@@ -46,7 +46,6 @@ class ProductCreateView(CreateView):
 class ProductUpdateView(UpdateView):
     model = Product
     fields = ['name', 'price', 'image', 'description', 'active', 'quantite', 'categorie', 'type']
-    # form_class = ProductForm
 
     def get(self, request, *args, **kwargs):
         boutique = Boutique.objects.get(pk=kwargs['boutique_id'])
@@ -59,14 +58,13 @@ class ProductUpdateView(UpdateView):
         if request.user != boutique.owner.user:
             return HttpResponseRedirect(reverse_lazy('index'))
 
-        instance = self.get_object()
+        instance = Product.objects.get(pk=kwargs['pk'])
         form = ProductForm(request.POST, request.FILES, instance=instance)
-
-        print(instance.__dict__)
 
         if form.is_valid():
             obj = form.save(commit=False)
             obj.save()
+            print(instance.__dict__)
             return super(ProductUpdateView, self).form_valid(form)
 
         return super(ProductUpdateView, self).post(request, *args, **kwargs)
@@ -113,8 +111,9 @@ def product_dublicate_view(request, boutique_id, pk):
         product.date = None
         product.save()
         data = {
-            "message": "success",
-            "id": product.id
+            "id": product.id,
+            "boutique_id": product.boutique.id,
+            "active": product.active
         }
     return JsonResponse(json.dumps(data), safe=False)
 
@@ -214,15 +213,17 @@ class ProductPictureDeleteView(DeleteView):
 
 @login_required
 def product_state_view(request, boutique_id, pk):
-    data = {}
-
     product = Product.objects.get(pk=pk)
+    
     if request.user != product.boutique.owner.user:
         return HttpResponseRedirect(reverse_lazy('index'))
 
     if request.method == 'POST':
         product.active = not product.active
         product.save()
-        data["message"] = "success"
+
+    data = {
+        "active": product.active
+    }
 
     return JsonResponse(json.dumps(data), safe=False)
