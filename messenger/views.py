@@ -64,6 +64,7 @@ def new(request):
                 to_user = User.objects.get(username=to_user_username)
 
             except Exception:
+                print('new message error')
                 return redirect('/messages/new/')
 
         message = request.POST.get('message')

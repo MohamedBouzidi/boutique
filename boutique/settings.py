@@ -32,8 +32,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'shop',
+    'feeds',
+    'articles',
+    'questions',
+    'activities',
+    'authentication',
     'messenger',
+    'shop',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -117,3 +122,11 @@ SASS_PROCESSOR_ENABLED = True
 SASS_PROCESSOR_ROOT = os.path.join('static', 'shop', 'css')
 SASS_PROCESSOR_AUTO_INCLUDE = False
 SASS_PRECISION = 8
+
+
+LOGIN_REDIRECT_URL = '/feeds/'
+
+ALLOWED_SIGNUP_DOMAINS = ['*']
+
+FILE_UPLOAD_TEMP_DIR = '/tmp/'
+FILE_UPLOAD_PERMISSIONS = 0o644

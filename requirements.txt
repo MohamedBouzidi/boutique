@@ -3,3 +3,17 @@ Pillow
 libsass
 django-compressor
 django-sass-processor
+
+django-autoslug
+dj-database-url
+dj-static
+gunicorn
+Unipath
+python-decouple
+Pillow
+bleach
+Markdown
+whitenoise
+pytz
+psycopg2
+
