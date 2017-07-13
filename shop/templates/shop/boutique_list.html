@@ -19,8 +19,8 @@
                     <td>{{ boutique.name }}</td>
                     <td><img src="{{ MEDIA_URL }}{{ boutique.logo.url }}" alt="{{ boutique.name }}" class="img-responsive-small"></td>
                     <td>{{ boutique.address }}</td>
-                    <td>{{ boutique.description }}</td>
-                    <td>
+                    <td class="col-md-4">{{ boutique.description }}</td>
+                    <td class="col-md-3">
                         <div class="btn-group" role="group" aria-label="...">
                           <a href="{% url 'detail_boutique' boutique.id %}" class="btn btn-default btn-sm">Detail</a>
                           <a href="{% url 'edit_boutique' boutique.id %}" class="btn btn-default btn-sm">Edit</a>

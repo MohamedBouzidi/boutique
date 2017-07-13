@@ -52,8 +52,9 @@ def business_register_view(request):
             request.user.username = request.POST['username']
             request.user.save()
             businessuser.save()
-        
-        return render(request, 'shop/boutique_list.html', {'new_businessuser': False})
+            return render(request, 'shop/boutique_list.html')
+        else:
+            return render(request, 'shop/wizard.html', {'form': form})
     else:
         return HttpResponseRedirect(reverse_lazy('index'))
 

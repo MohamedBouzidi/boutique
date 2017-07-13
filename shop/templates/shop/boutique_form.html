@@ -1,8 +1,8 @@
 {% extends 'shop/boutique_list_base.html' %}
 
 {% block section %}
-    {% if new_businessuser == True %}
-    {% include 'partials/wizard.html' with form=form %}
+    {% if not request.user.businessuser %}
+    {% include 'partials/wizard.html' %}
     {% else %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

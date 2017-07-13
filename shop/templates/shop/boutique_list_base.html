@@ -2,28 +2,27 @@
 
 {% block content %}
     
-    <div class="panel panel-default">
-        <div class="panel-body" style="min-height: 320px;">
+    <div class="panel panel-default" style="overflow: auto;">
+        <div class="panel-body">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="affix">
-                        {% if user.businessuser %}
-                            <img src="{{ MEDIA_URL }}{{ user.businessuser.picture.url }}" alt="{{ user.businessuser.username }}" class="img-responsive-thumbnail">
-                        {% endif %}
-                        <h2>{{ user.username }}</h2>
-                        <p>{{ user.email }}</p>
-                        <span>{{ user.boutique_set.count }} boutiques(s)</span><br><br>
-                        <div class="btn-group" role="group">
-                            <a href="{% url 'new_boutique' %}" id="ajouter" class="btn btn-default">Ajouter</a>
-                            <a href="{% url 'list_boutique' %}" id="lister" class="btn btn-default">Boutiques</a>
-                        </div>
-                        {% if user.businessuser %}
-                        <div class="btn-group" role="group">
-                            <a href="{% url 'edit_user' %}" id="edit-user" class="btn btn-default">Edit Account</a>
-                            <a href="{% url 'delete_user' %}" id="delete-user" class="btn btn-default">Delete Account</a>
-                        </div>
-                        {% endif %}
+                    {% if user.businessuser %}
+                        <img src="{{ MEDIA_URL }}{{ user.businessuser.picture.url }}" alt="{{ user.businessuser.username }}" class="img-responsive-thumbnail">
+                    {% endif %}
+                    <h2>{{ user.username }}</h2>
+                    <p>{{ user.email }}</p>
+                    <span>{{ user.boutique_set.count }} boutiques(s)</span><br><br>
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'new_boutique' %}" id="ajouter" class="btn btn-default">Ajouter</a>
+                        <a href="{% url 'list_boutique' %}" id="lister" class="btn btn-default">Boutiques</a>
                     </div>
+                    {% if user.businessuser %}
+                    <br><br>
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'edit_user' %}" id="edit-user" class="btn btn-default">Edit Account</a>
+                        <a href="{% url 'delete_user' %}" id="delete-user" class="btn btn-default">Delete Account</a>
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="col-md-8" id="content">
                     {% block section %}{% endblock %}

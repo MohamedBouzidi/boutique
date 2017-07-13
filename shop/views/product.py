@@ -124,7 +124,8 @@ class ProductDetailView(DetailView):
     context_object_name = 'product'
 
     def get(self, request, *args, **kwargs):
-        if not self.get_object().active:
+        is_owner = BusinessUser.objects.filter(user=request.user).exists() and self.get_object().boutique.owner == request.user.businessuser
+        if not is_owner and not self.get_object().active:
             return HttpResponseRedirect(reverse_lazy('index'))
         return super(ProductDetailView, self).get(request, *args, **kwargs)
 

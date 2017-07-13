@@ -39,7 +39,7 @@ class BoutiqueCreateView(CreateView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        obj.owner = BusinessUser.objects.get(user=self.request.user)
+        obj.owner = self.request.user.businessuser
         obj.save()
         return super(BoutiqueCreateView, self).form_valid(form)
 

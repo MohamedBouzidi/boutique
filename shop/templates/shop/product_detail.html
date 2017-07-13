@@ -38,9 +38,16 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <h2>{{ product.name }}</h2>
-                    <h4>{{ product.categorie.label }}</h4>
-                    <span class="label label-info">{{ product.price }}</span><br><br>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2 class="product-name">{{ product.name }}</h2>
+                            <h4 class="product-categorie">{{ product.categorie.label }}</h4>
+                        </div>
+                        <div class="col-md-4">
+                            <h2 class="product-price pull-right">{{ product.price }} DT</h2>
+                        </div>
+                    </div>
+                    <hr>
                     <p>{{ product.description }}</p>
                 </div>
             </div>

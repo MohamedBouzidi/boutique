@@ -7,10 +7,10 @@ from django.core.validators import MinValueValidator
 
 
 def get_product_image_link(instance, filename):
-    return os.path.join(instance.boutique.owner.user.username, instance.boutique.name, "{}_{}".format(instance.name, instance.date))
+    return os.path.join(instance.boutique.owner.user.username, instance.boutique.name, instance.name, "{}_{}".format(instance.name, instance.date))
 
 def get_product_extra_image_link(instance, filename):
-   return os.path.join(instance.product.boutique.owner.user.username, instance.product.boutique.name, "{}_{}".format(instance.product.name, instance.date))    
+   return os.path.join(instance.product.boutique.owner.user.username, instance.product.boutique.name, instance.product.name, "{}_{}".format(instance.product.name, instance.date))    
 
 def get_boutique_logo_link(instance, filename):
     return os.path.join(instance.owner.user.username, instance.name, "{}_{}".format(instance.name, instance.date))
