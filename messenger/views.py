@@ -35,8 +35,14 @@ def inbox(request):
 def messages(request, username):
     conversations = Message.get_conversations(user=request.user)
     active_conversation = username
+
     messages = Message.objects.filter(user=request.user,
                                       conversation__username=username)
+
+    if request.method == 'GET' and not messages:
+        print('No messages')
+        return render(request, 'messenger/new.html', {'username': username})
+
     messages.update(is_read=True)
     for conversation in conversations:
         if conversation['user'].username == username:
@@ -52,6 +58,7 @@ def messages(request, username):
 @login_required
 def new(request):
     if request.method == 'POST':
+        print('new POST')
         from_user = request.user
         to_user_username = request.POST.get('to')
         try:
