@@ -109,11 +109,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(BASE_DIR, STATIC_URL)
 STATICFILES_FINDER = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'sass_processor.finders.CssFinder',
+]
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
 ]
 
 LOGIN_URL = 'login'
@@ -130,3 +134,7 @@ ALLOWED_SIGNUP_DOMAINS = ['*']
 
 FILE_UPLOAD_TEMP_DIR = '/tmp/'
 FILE_UPLOAD_PERMISSIONS = 0o644
+
+
+DEFAULT_USER_PROFILE_PICTURE_NAME = os.path.join('img', 'user.png')
+DEFAULT_USER_PROFILE_PICTURE_PATH = os.path.join(STATIC_URL, DEFAULT_USER_PROFILE_PICTURE_NAME)

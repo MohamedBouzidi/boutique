@@ -6,9 +6,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-4">
-                    {% if user.businessuser %}
-                        <img src="{{ MEDIA_URL }}{{ user.businessuser.picture.url }}" alt="{{ user.businessuser.username }}" class="img-responsive-thumbnail">
-                    {% endif %}
+                    <img src="{{ user.profile.get_picture }}" alt="{{ user.businessuser.username }}" class="img-responsive-thumbnail">
                     <h2>{{ user.username }}</h2>
                     <p>{{ user.email }}</p>
                     <span>{{ user.boutique_set.count }} boutiques(s)</span><br><br>
@@ -19,8 +17,8 @@
                     {% if user.businessuser %}
                     <br><br>
                     <div class="btn-group btn-group-justified btn-group-raised" role="group">
-                        <a href="{% url 'edit_user' %}" id="edit-user" class="btn btn-info">Edit Account</a>
-                        <a href="{% url 'delete_user' %}" id="delete-user" class="btn btn-danger">Delete Account</a>
+                        <a href="{% url 'edit_business_user' %}" id="edit-user" class="btn btn-info">Edit Account</a>
+                        <a href="{% url 'delete_business_user' %}" id="delete-user" class="btn btn-danger">Delete Account</a>
                     </div>
                     {% endif %}
                 </div>

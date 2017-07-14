@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 from boutique.settings import ALLOWED_SIGNUP_DOMAINS
+from authentication.models import Profile
 
 
 def SignupDomainValidator(value):
@@ -50,6 +51,12 @@ def UniqueEmailValidator(value):
 def UniqueUsernameIgnoreCaseValidator(value):
     if User.objects.filter(username__iexact=value).exists():
         raise ValidationError('User with this Username already exists.')
+
+
+class ProfileForm(forms.ModelForm):
+  class Meta:
+    model = Profile
+    fields = ['picture', 'gender']
 
 
 class SignUpForm(forms.ModelForm):

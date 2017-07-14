@@ -12,7 +12,7 @@
     <a href="{% url 'messages' conversation.user.username %}" 
       class="list-group-item{% if active == conversation.user.username %} active{% endif %}">
       <img src="{{ conversation.user.profile.get_picture }}" class="conversation-portrait">
-      {{ conversation.user.profile.get_screen_name }}
+      <span style="color: black;">{{ conversation.user.profile.get_screen_name }}</span>
       {% if conversation.unread > 0 %}
         <span class="badge pull-right">{{ conversation.unread }}</span>
       {% endif %}

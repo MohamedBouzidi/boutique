@@ -1,4 +1,6 @@
 import json
+
+from django.core.files import File
 from django.shortcuts import render
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
@@ -9,9 +11,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from django.utils.decorators import method_decorator
+from django.conf import settings
 
 from shop.models import BusinessUser
 from shop.forms import BusinessUserForm
+from authentication.models import Profile
 
 
 def login_view(request):
@@ -37,6 +41,8 @@ def register_view(request):
         if password == password_confirm:
             if not User.objects.filter(email=email).exists():
                 user = User.objects.create_user(username=email, password=password, email=email)
+                profile = Profile(user=user)
+                profile.save()
                 return HttpResponseRedirect(reverse_lazy('index'))
     return render(request, "shop/login_register_form.html")
 
@@ -47,7 +53,7 @@ def business_register_view(request):
 
         if form.is_valid():
             fields = form.cleaned_data
-            businessuser = BusinessUser(picture=fields['picture'], description=fields['description'], type=fields['type'])
+            businessuser = BusinessUser(description=fields['description'], type=fields['type'])
             businessuser.user = request.user
             request.user.username = request.POST['username']
             request.user.save()
@@ -68,7 +74,7 @@ def logout_view(request):
 class BusinessUserUpdateView(UpdateView):
     model = BusinessUser
     success_url = reverse_lazy('list_boutique')
-    fields = ['picture', 'description', 'type']
+    fields = ['description', 'type']
 
     def form_valid(self, form):
         obj = form.save(commit=False)

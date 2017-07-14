@@ -10,12 +10,21 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 
+from django.contrib.staticfiles.templatetags.staticfiles import static
+
 from activities.models import Notification
+
+
+def get_user_picture_link(instance, filename):
+    return os.path.join(instance.user.username, "{}_{}".format(instance.user.username, instance.user.date_joined))
 
 
 @python_2_unicode_compatible
 class Profile(models.Model):
     user = models.OneToOneField(User)
+    picture = models.ImageField(upload_to=get_user_picture_link, null=True, blank=True)
+    gender = models.TextField(max_length=10, choices=(('FEMALE', 'female'), ('MALE', 'male'),), blank=True, null=True)
+
     location = models.CharField(max_length=50, null=True, blank=True)
     url = models.CharField(max_length=50, null=True, blank=True)
     job_title = models.CharField(max_length=50, null=True, blank=True)
@@ -34,23 +43,9 @@ class Profile(models.Model):
         return url
 
     def get_picture(self):
-        no_picture = 'http://trybootcamp.vitorfs.com/static/img/user.png'
-        try:
-            filename = settings.MEDIA_ROOT + '/profile_pictures/' +\
-                self.user.username + '.jpg'
-            picture_url = settings.MEDIA_URL + 'profile_pictures/' +\
-                self.user.username + '.jpg'
-            if os.path.isfile(filename):
-                return picture_url
-            else:
-                gravatar_url = 'http://www.gravatar.com/avatar/{0}?{1}'.format(
-                    hashlib.md5(self.user.email.lower()).hexdigest(),
-                    urllib.urlencode({'d': no_picture, 's': '256'})
-                    )
-                return gravatar_url
-
-        except Exception:
-            return no_picture
+        if self.picture:
+            return os.path.join(settings.MEDIA_URL, self.picture.url)
+        return static(os.path.join('img', 'user.png'))
 
     def get_screen_name(self):
         try:

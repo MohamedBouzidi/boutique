@@ -1,5 +1,6 @@
 from django.conf.urls import url
-from . import views
+from shop import views
+from authentication import views as auth_views
 
 
 urlpatterns = [
@@ -36,9 +37,8 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)$', views.BoutiqueDetailView.as_view(), name='detail_boutique'),
 
     # User URLs
-    url(r'^account/edit$', views.BusinessUserUpdateView.as_view(), name='edit_user'),
-    url(r'^account/delete$', views.BusinessUserDeleteView.as_view(), name='delete_user'),
+    url(r'^account/business/edit$', views.BusinessUserUpdateView.as_view(), name='edit_business_user'),
+    url(r'^account/business/delete$', views.BusinessUserDeleteView.as_view(), name='delete_business_user'),
+    url(r'^account/edit$', auth_views.UserProfileUpdateView.as_view(), name='edit_user_profile'),
 
-    # test URLs: API for Backbone
-    url(r'^api/products/(?P<pk>[0-9]+)$', views.products_api_view, name='products_api'), 
 ]

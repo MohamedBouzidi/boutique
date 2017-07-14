@@ -77,7 +77,6 @@ class BoutiqueUpdateView(UpdateView):
         if form.is_valid():
             obj = form.save(commit=False)
             obj.save()
-            print(instance.__dict__)
             return super(BoutiqueUpdateView, self).form_valid(form)
 
         return super(BoutiqueUpdateView, self).post(request, *args, **kwargs)

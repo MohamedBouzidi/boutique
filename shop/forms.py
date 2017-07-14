@@ -5,9 +5,8 @@ from .models import Boutique, Product, Categorie, Picture, BusinessUser
 class BusinessUserForm(ModelForm):
     class Meta:
         model = BusinessUser
-        fields = ['picture', 'description', 'type']
+        fields = ['description', 'type']
         widgets = {
-            'picture': FileInput(attrs={'class': 'form-control'}),
             'description': Textarea(attrs={'class': 'form-control'}),
             'type': Select(attrs={'class': 'form-control'})
         }

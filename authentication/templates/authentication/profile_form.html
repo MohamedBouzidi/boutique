@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-4">
+          <img src="{{ user.profile.get_picture }}" alt="{{ user.username }}" class="img-responsive-thumbnail">
+          <h2>{{ user.username }}</h2>
+          <p>{{ user.email }}</p>
+          <span>{{ user.boutique_set.count }} boutiques(s)</span><br><br>
+        </div>
+        <div class="col-md-8">
+          <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+              {% if form.errors %}
+                  {% for field in form %}
+                      {% if field.errors %}
+                      <div class="alert alert-danger">
+                        {{ field.name }}
+                        {% for error in field.errors %}
+                        <strong>{{ error|escape }}</strong>
+                        {% endfor %}
+                      </div>
+                      {% endif %}
+                  {% endfor %}
+                  {% for error in form.non_field_errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                  {% endfor %}
+              {% endif %}
+
+            <fieldset>
+              <div class="form-group">
+                <label for="username" class="col-md-2 control-label">Username</label>
+                <div class="col-md-10">
+                  <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="picture" class="col-md-2 control-label">picture</label>
+                <div class="col-md-10">
+                  <input type="text" readonly="" class="form-control" placeholder="Browse...">
+                  {{ form.picture }}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="gender" class="col-md-2 control-label">gender</label>
+                <div class="col-md-10">
+                  <select class="form-control" name="{{ form.gender.name }}" id="gender">
+                    {% for value, text in form.gender.field.choices %}
+                        {% if value == form.gender.value %}
+                        <option value="{{ value }}" selected>{{ text }}</option>
+                        {% else %}
+                        <option value="{{ value }}">{{ text }}</option>
+                        {% endif %}
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                  <button type="button" class="btn btn-default btn-raised">Cancel</button>
+                  <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -15,14 +15,10 @@ def get_product_extra_image_link(instance, filename):
 def get_boutique_logo_link(instance, filename):
     return os.path.join(instance.owner.user.username, instance.name, "{}_{}".format(instance.name, instance.date))
 
-def get_user_picture_link(instance, filename):
-    return os.path.join(instance.user.username, "{}_{}".format(instance.user.username, instance.user.date_joined))
-
 
 class BusinessUser(models.Model):
     user = models.OneToOneField(User)
     description = models.CharField(max_length=255)
-    picture = models.ImageField(upload_to=get_user_picture_link)
     type = models.CharField(max_length=255, choices=(('ENTERPRISE', 'Entreprise'), ('INDIVIDUAL', 'Particulier'),))
 
     def as_json(self):
