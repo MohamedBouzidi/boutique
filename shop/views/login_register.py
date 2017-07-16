@@ -61,8 +61,8 @@ def business_register_view(request):
             return render(request, 'shop/boutique_list.html')
         else:
             return render(request, 'shop/wizard.html', {'form': form})
-    else:
-        return HttpResponseRedirect(reverse_lazy('index'))
+
+    return render(request, 'shop/wizard.html', {'form': BusinessUserForm()})
 
 
 def logout_view(request):

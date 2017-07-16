@@ -88,6 +88,9 @@ class Product(models.Model):
     categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
     type = models.ForeignKey(Type, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ('-date',)
+
     def as_json(self):
         return dict(name=self.name, image=self.image.url, price=self.price,
                     description=self.description, date=str(self.date), active=self.active, 

@@ -63,6 +63,11 @@
                 </div>
               </div>
 
+              {% if not user.businessuser %}
+              <hr>
+              Want to open your own shop ? <a href="{% url 'business_register' %}">Start here</a>
+              {% endif %}
+
               <div class="form-group">
                 <div class="col-md-10 col-md-offset-2">
                   <button type="button" class="btn btn-default btn-raised">Cancel</button>

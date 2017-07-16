@@ -10,11 +10,11 @@
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
 
     <link rel="stylesheet" href="{% static 'shop/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'shop/css/bootstrap-slider.min.css' %}">
     <link rel="stylesheet" href="{% static 'shop/css/style.css' %}">
 
     <link rel="stylesheet" href="{% static 'shop/css/bootstrap-material-design.min.css' %}">
     <link rel="stylesheet" href="{% static 'shop/css/ripples.min.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap-slider.min.css' %}">
     
     {% load sass_tags %}
     <link rel="stylesheet" href="{#% sass_src 'shop/scss/theme.scss' %#}">
@@ -29,6 +29,9 @@
     <script src="{% static 'shop/js/ripples.min.js' %}"></script>
     
     <script src="{% static 'shop/js/mustache.min.js' %}"></script>
+
+    {% load static %}
+    <script src="{% static 'messenger/js/check_messages.js' %}"></script>
 
     {% block head %}
     {% endblock %}

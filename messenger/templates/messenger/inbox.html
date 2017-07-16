@@ -9,7 +9,7 @@
   {% if messages %}
   <ul class="conversation">
     {% for message in messages %}
-      {% include 'messenger/includes/partial_message.html' with message=message %}
+      <li class="message">{% include 'messenger/includes/partial_message.html' with message=message %}</li>
     {% endfor %}
     <li class="send-message">
       <img src="{{ user.profile.get_picture }}" class="picture">
@@ -22,6 +22,10 @@
       </div>
     </li>
   </ul>
+
+  {% load static %}
+  <!-- <script src="{% static 'messenger/js/instant_message.js' %}"></script> -->
+  
   {% else %}
     <div class="text-center">
       <h4>Your inbox is empty!</h4>

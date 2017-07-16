@@ -40,7 +40,6 @@ def messages(request, username):
                                       conversation__username=username)
 
     if request.method == 'GET' and not messages:
-        print('No messages')
         return render(request, 'messenger/new.html', {'username': username})
 
     messages.update(is_read=True)
@@ -58,7 +57,6 @@ def messages(request, username):
 @login_required
 def new(request):
     if request.method == 'POST':
-        print('new POST')
         from_user = request.user
         to_user_username = request.POST.get('to')
         try:
@@ -136,3 +134,24 @@ def users(request):
 def check(request):
     count = Message.objects.filter(user=request.user, is_read=False).count()
     return HttpResponse(count)
+
+
+@login_required
+@ajax_required
+def latest(request):
+    data = {}
+    if request.GET.get('from_user'):
+        latest = Message.objects.filter(user=request.user, from_user=request.GET.get('from_user'), is_read=False).last()
+        if request.GET.get('is_read'):
+            data = {'success': True}
+            latest.is_read = True
+            latest.save()
+        else:
+            if latest:
+                data = {
+                    "message": latest.message,
+                    "date": str(latest.date.__format__('%b %m %H:%m')),
+                    "user": latest.conversation.username,
+                    "picture": latest.conversation.profile.get_picture()
+                }
+    return HttpResponse(json.dumps(data), content_type='application/json')
