@@ -14,7 +14,8 @@
     {{ product.like_set.count }} like(s)
     {% endif %}
     </span>
-    <button class="btn btn-default pull-right like" data-id="{{ product.id }}">
+    <button class="btn btn-xs btn-raised btn-default pull-right" style="font-weight: bold;">Wish</button>
+    <button class="btn btn-xs btn-raised btn-default pull-right like" style="font-weight: bold;" data-id="{{ product.id }}">
     {% if product.id in liked %}
     Dislike
     {% else %}
