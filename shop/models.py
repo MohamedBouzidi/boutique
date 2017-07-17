@@ -111,3 +111,12 @@ class Picture(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     name = models.ImageField(upload_to=get_product_extra_image_link)
     date = models.DateTimeField(auto_now_add=True)
+
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (('user', 'product'),)

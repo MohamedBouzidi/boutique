@@ -12,7 +12,7 @@
                     <div class="row">
                         {% for product in products %}
                             <div class="col-md-4 col-sm-12">
-                                {% include 'partials/product.html' with product=product %}
+                                {% include 'partials/product.html' with product=product liked=liked %}
                             </div>
                             {% if forloop.counter in rows %}
                             </div>

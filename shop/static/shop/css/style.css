@@ -19,7 +19,6 @@
 
 .product:hover {
     text-decoration: none;
-    cursor: pointer;
 }
 
 .product .badge {

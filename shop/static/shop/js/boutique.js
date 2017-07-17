@@ -56,7 +56,7 @@ $("#delete-user").on('click', function (e) {
     var c = confirm("Are you sure?");
     if (c) {
         $.ajax({
-            url: 'account/delete',
+            url: '/auth/account/business/delete',
             type: "POST",
             success: function (data) {
                 window.location.href = '/boutique';

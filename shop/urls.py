@@ -6,12 +6,6 @@ from authentication import views as auth_views
 urlpatterns = [
     # Index URL
     url(r'^$', views.IndexView.as_view(), name='index'),
-
-    # Login & Register URLs
-    url(r'^login$', views.login_view, name='login'),
-    url(r'^register/business$', views.business_register_view, name='business_register'),
-    url(r'^register$', views.register_view, name='register'),
-    url(r'^logout$', views.logout_view, name='logout'),
     
     # AJAX URLs
     url(r'^search$', views.search_view, name='search'),
@@ -36,9 +30,6 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/delete$', views.BoutiqueDeleteView.as_view(), name='delete_boutique'),
     url(r'^(?P<pk>\d+)$', views.BoutiqueDetailView.as_view(), name='detail_boutique'),
 
-    # User URLs
-    url(r'^account/business/edit$', views.BusinessUserUpdateView.as_view(), name='edit_business_user'),
-    url(r'^account/business/delete$', views.BusinessUserDeleteView.as_view(), name='delete_business_user'),
-    url(r'^account/edit$', auth_views.UserProfileUpdateView.as_view(), name='edit_user_profile'),
-
+    # Interactions URLs
+    url(r'^like/(?P<pk>\d+)$', views.like, name='like_product'),
 ]

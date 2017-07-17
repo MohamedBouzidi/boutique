@@ -1,11 +1,25 @@
-<a href="{% url 'detail_product' product.boutique.id product.id %}" class="product">
-    <div class="thumbnail">
-      <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive-thumbnail">
-      <div class="caption">
-        <h3>{{ product.name }}</h3>
-        <span class="badge">{{ product.price }} DT</span>
-        <p>{{ product.categorie.label }}</p>
-        <p>{{ product.date }}</p>
-      </div>
-    </div>
-</a>
+<div class="thumbnail product" style="overflow: auto;">
+  <a href="{% url 'detail_product' product.boutique.id product.id %}">
+    <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive-thumbnail">
+  </a>
+  <div class="caption">
+    <a href="{% url 'detail_product' product.boutique.id product.id %}">
+      <h3>{{ product.name }}</h3>
+    </a>
+    <span class="badge">{{ product.price }} DT</span>
+    <p>{{ product.categorie.label }}</p>
+    <hr>
+    <span class="likes">
+    {% if product.like_set.count > 0 %}
+    {{ product.like_set.count }} like(s)
+    {% endif %}
+    </span>
+    <button class="btn btn-default pull-right like" data-id="{{ product.id }}">
+    {% if product.id in liked %}
+    Dislike
+    {% else %}
+    Like
+    {% endif %}
+    </button>
+  </div>
+</div>

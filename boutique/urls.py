@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 urlpatterns = [
+    url(r'^auth/', include('authentication.urls')),
     url(r'^boutique/', include('shop.urls')),
     url(r'^messages/', include('messenger.urls')),
     url(r'^admin/', include(admin.site.urls)),
