@@ -9,6 +9,6 @@ urlpatterns = [
     url(r'^users/$', views.users, name='users_message'),
     url(r'^check/$', views.check, name='check_message'),
     url(r'^latest/$', views.latest, name='latest_message'),
-    url(r'^(?P<username>[^/]+)/(?P<product_id>\d+)?/?$', views.messages, name='messages'),
+    url(r'^(?P<username>[^/]+)/$', views.messages, name='messages'),
     url(r'^$', views.inbox, name='inbox'),
 ]

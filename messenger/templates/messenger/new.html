@@ -20,17 +20,6 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="about" class="col-sm-1 control-label">About</label>
-      <div class="col-sm-11">
-        {% if product %}
-        <input type="text" class="form-control" id="about" name="about" value="{{ product.name }}" disabled>
-        <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
-        {% else %}
-        <input type="text" class="form-control" id="about" name="about">
-        {% endif %}
-      </div>
-    </div>
-    <div class="form-group">
       <label for="to" class="col-sm-1 control-label">Message</label>
       <div class="col-sm-11">
         <textarea class="form-control" id="message" name="message" placeholder="Write a message" rows="4"></textarea>

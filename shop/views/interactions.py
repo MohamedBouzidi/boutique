@@ -3,20 +3,39 @@ from boutique.decorators import ajax_required
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
-from shop.models import Product, Like
+from shop.models import Product, Reaction
 
 
 @login_required
 @ajax_required
-def like(request, pk):
+def react(request, pk):
+
   data = {}
   product = Product.objects.get(pk=pk)
-  is_liked = product.like_set.filter(user=request.user).exists()
-  if is_liked:
-    product.like_set.filter(user=request.user).delete()
-    data['message'] = 'Like'
-  else:
-    product.like_set.create(user=request.user)
-    data['message'] = 'Dislike'
-  data['count'] = product.like_set.count()
+  reaction = request.GET.get('reaction')
+  has_reacted = Reaction.objects.filter(user=request.user, product=product).count() == 1
+  reaction_choices = Reaction.get_choices()
+
+  print(reaction_choices)
+
+  if has_reacted:
+    print('has reacted')
+    reaction_obj = request.user.reaction_set.filter(product=product).first()
+    if reaction in reaction_choices:
+      reaction_obj.type = reaction
+      reaction_obj.save()
+      data['reaction'] = reaction
+
+      if reaction == reaction_obj.type:
+        reaction_obj.delete()
+
+    elif not reaction:
+      reaction_obj.delete()
+      data['reaction'] = ''
+
+  elif reaction in  reaction_choices:
+    Reaction.objects.create(user=request.user, product=product, type=reaction)
+    data['reaction'] = reaction;
+
+  data['count'] = product.reaction_set.count()
   return HttpResponse(json.dumps(data), content_type='application/json')

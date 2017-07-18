@@ -25,6 +25,9 @@ class BusinessUser(models.Model):
         return dict(name=self.user.username, email=self.user.email, password=self.user.password,
                     description=self.description, picture=self.picture.url, type=self.type)
 
+    def get_top_products():
+        return None
+
 
 class Boutique(models.Model):
     name = models.CharField(max_length=255, blank=False)
@@ -113,19 +116,15 @@ class Picture(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
 
-class Like(models.Model):
+class Reaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    type = models.CharField(max_length=255, blank=True, null=True, choices=(('NORMAL', 'normal'), ('SMILE', 'smile'), ('LOVE', 'love'), ('WISH', 'wish'),))
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = (('user', 'product'),)
 
-
-class Wish(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = (('user', 'product'),)
+    @staticmethod
+    def get_choices():
+        return [choice[1] for choice in Reaction._meta.get_field('type').choices]

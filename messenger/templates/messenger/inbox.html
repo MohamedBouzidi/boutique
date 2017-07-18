@@ -7,78 +7,45 @@
 
 {% block container %}
   {% if messages %}
-    {% if product %}
-      <h3>
-        <a href="{% url 'detail_product' product.boutique.id product.id %}">{{ product.name }}</a>
-      </h3>
-    {% endif %}
-  <ul class="conversation">
-    {% for message in messages %}
-      <li class="message">{% include 'messenger/includes/partial_message.html' with message=message %}</li>
-    {% endfor %}
-    <li class="send-message">
-      <img src="{{ user.profile.get_picture }}" class="picture">
-      <div style="margin-top: .3em">
-        <form role="form" method="post" action="{% url 'send_message' %}" id="send">
-          {% csrf_token %}
-          <input type="hidden" name="to" value="{{ active }}">
-          <input class="form-control" type="text" name="message" placeholder="Write a message..." maxlength="1000" autocomplete="off">
-          {% if product %}
-          <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
-          {% endif %}
-        </form>
+  <div class="row">
+    <div class="col-md-8">
+        
+      <ul class="conversation">
+        {% for message in messages %}
+          <li class="message">{% include 'messenger/includes/partial_message.html' with message=message %}</li>
+        {% endfor %}
+        <li class="send-message">
+          <img src="{{ user.profile.get_picture }}" class="picture">
+          <div style="margin-top: .3em">
+            <form role="form" method="post" action="{% url 'send_message' %}" id="send">
+              {% csrf_token %}
+              <input type="hidden" name="to" value="{{ active }}">
+              <input class="form-control" type="text" name="message" placeholder="Write a message..." maxlength="1000" autocomplete="off">
+              {% if product %}
+              <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
+              {% endif %}
+            </form>
+          </div>
+        </li>
+      </ul>
+
+      <input type="hidden" id="conversation_user" name="conversation_user" value="{{ activeId }}">
+
+    </div>
+    <div class="col-md-4">
+      <div class="list-group products">
+        {% for product in products %}
+          <a href="{% url 'detail_product' product.boutique.id product.id %}" class="list-group-item product">
+            <h4 class="list-group-item-heading">{{ product.name }}</h4>
+            <p class="list-group-item-text">{{ product.categorie.label }}</p>
+          </a>
+        {% endfor %}
       </div>
-    </li>
-  </ul>
 
-  <input type="hidden" id="conversation_user" name="conversation_user" value="{{ activeId }}">
-
-  {% load static %}
-  <!-- <script src="{% static 'messenger/js/instant_message.js' %}"></script> -->
-  <script>
-    $(function () {
-      function fetch_latest () {
-        var $sendMessage = $('.send-message');
-        var userId = $('#conversation_user').val();
-
-        $.ajax({
-          url: '/messages/latest',
-          cache: false,
-          data: {
-            'from_user': userId
-          },
-          success: function (data) {
-            if (data.message) {
-              $sendMessage.before("<li class='message'><img src='" + data.picture + "' class='picture'>" +
-                                    "<div>" +
-                                      "<h5>" +
-                                        "<small class='pull-right'>" +
-                                          data.date + 
-                                        "</small>" +
-                                        "<a href='#'>" +
-                                          data.user + 
-                                        "</a>" +
-                                      "</h5>" +
-                                        data.message +
-                                    "</div></li>");
-              $.ajax({
-                url: '/messages/latest/',
-                data: {
-                  'from_user': userId,
-                  'is_read': true,
-                }
-              });
-            }
-          },
-          complete: function () {
-            window.setTimeout(fetch_latest, 1000);
-          }
-        });
-      }
-      fetch_latest();
-    });
-  </script>
-  
+      {% load static %}
+      <script src="{% static 'messenger/js/instant_message.js' %}"></script>
+    </div>
+  </div>
   {% else %}
     <div class="text-center">
       <h4>Your inbox is empty!</h4>

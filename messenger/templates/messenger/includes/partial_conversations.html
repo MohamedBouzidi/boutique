@@ -10,7 +10,7 @@
 
   {% for conversation in conversations %}
     <a href="{% url 'messages' conversation.user.username %}" 
-      class="list-group-item{% if active == conversation.user.username %} active{% endif %}">
+      class="list-group-item" style="padding: 10px 25px; {% if active == conversation.user.username %}background: #ddd;{% endif %}">
       <img src="{{ conversation.user.profile.get_picture }}" class="conversation-portrait">
       <span style="color: black;">{{ conversation.user.profile.get_screen_name }}</span>
       {% if conversation.unread > 0 %}

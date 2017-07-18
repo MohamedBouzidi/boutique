@@ -119,3 +119,30 @@
 .navbar .navbar-nav a {
     font-weight: bold;
 }
+
+.reaction-slider {
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.reaction-slider .normal, .smile, .love, .wish {
+    background: none;
+    border: none;
+    position: absolute;
+}
+
+.reaction-slider .normal {
+    left: 80%;
+}
+
+.reaction-slider .smile {
+    left: 75%;
+}
+
+.reaction-slider .love {
+    left: 70%;
+}
+
+.reaction-slider .wish {
+    left: 65%;
+}

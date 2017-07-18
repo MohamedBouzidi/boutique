@@ -31,5 +31,5 @@ class IndexView(ListView):
         context['categories'] = categories
         context['types'] = Type.objects.all()
         context['rows'] = range(0, self.get_queryset().count(), 3)
-        context['liked'] = [p['product'] for p in self.request.user.like_set.values('product')]
+        context['liked'] = [p['product'] for p in self.request.user.reaction_set.values('product')]
         return context

@@ -31,5 +31,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)$', views.BoutiqueDetailView.as_view(), name='detail_boutique'),
 
     # Interactions URLs
-    url(r'^like/(?P<pk>\d+)$', views.like, name='like_product'),
+    url(r'^react/(?P<pk>\d+)$', views.react, name='react_product'),
 ]

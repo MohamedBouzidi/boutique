@@ -21,8 +21,7 @@ def inbox(request):
         active_conversation = conversation['user'].username
         active_id = conversation['user'].id
         messages = Message.objects.filter(user=request.user,
-                                          conversation=conversation['user'],
-                                          about=None)
+                                          conversation=conversation['user'])
         messages.update(is_read=True)
         for conversation in conversations:
             if conversation['user'].username == active_conversation:
@@ -37,7 +36,7 @@ def inbox(request):
 
 
 @login_required
-def messages(request, username, product_id):
+def messages(request, username):
     conversations = Message.get_conversations(user=request.user)
     active_conversation = username
 
@@ -49,15 +48,6 @@ def messages(request, username, product_id):
     }
 
     inbox_context = {'activeId': messages.first().conversation.id}
-
-    if product_id:
-        product = Product.objects.get(pk=product_id)
-        messages = messages.filter(about=product)
-        context['product'] = product
-        inbox_context['product'] = product
-    else:
-        messages = messages.filter(about=None)
-
 
     if request.method == 'GET' and not messages:
         return render(request, 'messenger/new.html', context)
@@ -80,7 +70,6 @@ def new(request):
     if request.method == 'POST':
         from_user = request.user
         to_user_username = request.POST.get('to')
-        product_id = request.POST.get('product_id')
 
         try:
             to_user = User.objects.get(username=to_user_username)
@@ -99,16 +88,8 @@ def new(request):
         if len(message.strip()) == 0:
             return redirect('/messages/new/')
 
-        product = None
-
-        if product_id:
-            product = Product.objects.get(pk=product_id)
-
         if from_user != to_user:
-            Message.send_message(from_user, to_user, message, about=product)
-
-        if product:
-            return redirect('/messages/{0}/{1}'.format(to_user_username, product.id))
+            Message.send_message(from_user, to_user, message)
         return redirect('/messages/{0}/'.format(to_user_username))
 
     else:
@@ -131,16 +112,11 @@ def send(request):
         to_user_username = request.POST.get('to')
         to_user = User.objects.get(username=to_user_username)
         message = request.POST.get('message')
-        product_id = request.POST.get('product_id')
-
-        product = None
-        if product_id:
-            product = Product.objects.get(pk=product_id)
 
         if len(message.strip()) == 0:
             return HttpResponse()
         if from_user != to_user:
-            msg = Message.send_message(from_user, to_user, message, about=product)
+            msg = Message.send_message(from_user, to_user, message)
             return render(request, 'messenger/includes/partial_message.html',
                           {'message': msg})
 

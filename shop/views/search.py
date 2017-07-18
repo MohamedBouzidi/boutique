@@ -125,6 +125,6 @@ def search_view(request):
         }
 
 
-        context['liked'] = [p['product'] for p in request.user.like_set.values('product')]
+        context['liked'] = [p['product'] for p in request.user.reaction_set.values('product')]
 
         return render(request, 'shop/search.html', context)

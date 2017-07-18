@@ -23,11 +23,11 @@ $(function () {
        } 
   });
 
-  $('.like').on('click', function () {
+  $('.reaction').on('click', function () {
     var $this = $(this);
     var id = $this.attr('data-id');
     $.ajax({
-      url: '/boutique/like/' + id,
+      url: '/boutique/react/' + id,
       success: function (likes) {
         if (likes.count > 0) {
           $this.siblings('.likes').html(likes.count +  ' like(s)');

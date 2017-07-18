@@ -1,26 +1,37 @@
+{% load static %}
 <div class="thumbnail product" style="overflow: auto;">
   <a href="{% url 'detail_product' product.boutique.id product.id %}">
     <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive-thumbnail">
   </a>
   <div class="caption">
     <a href="{% url 'detail_product' product.boutique.id product.id %}">
-      <h3>{{ product.name }}</h3>
+      <h3 class="title">{{ product.name }}</h3>
     </a>
     <span class="badge">{{ product.price }} DT</span>
     <p>{{ product.categorie.label }}</p>
     <hr>
-    <span class="likes">
-    {% if product.like_set.count > 0 %}
-    {{ product.like_set.count }} like(s)
+    <span class="reactions">
+    {% if product.reaction_set.count > 0 %}
+    {{ product.reaction_set.count }} reaction{% if product.reaction_set.count > 1 %}s{% endif %}
     {% endif %}
     </span>
-    <button class="btn btn-xs btn-raised btn-default pull-right" style="font-weight: bold;">Wish</button>
-    <button class="btn btn-xs btn-raised btn-default pull-right like" style="font-weight: bold;" data-id="{{ product.id }}">
-    {% if product.id in liked %}
-    Dislike
-    {% else %}
-    Like
-    {% endif %}
-    </button>
+
+    <div class="reaction-slider">
+      <button data-product-id="{{ product.id }}" data-reaction="normal" class="reaction-button normal">
+        <img src="{% static 'img/reactions/normal.png' %}" alt="" width="25" height="25">
+      </button>
+
+      <button data-product-id="{{ product.id }}" data-reaction="smile" class="reaction-button smile">
+        <img src="{% static 'img/reactions/smile.png' %}" alt="" width="25" height="25">
+      </button>
+
+      <button data-product-id="{{ product.id }}" data-reaction="love" class="reaction-button love">
+        <img src="{% static 'img/reactions/love.png' %}" alt="" width="25" height="25">
+      </button>
+
+      <button data-product-id="{{ product.id }}" data-reaction="wish" class="reaction-button wish">
+        <img src="{% static 'img/reactions/wish.png' %}" alt="" width="25" height="25">
+      </button>
+    </div>
   </div>
 </div>

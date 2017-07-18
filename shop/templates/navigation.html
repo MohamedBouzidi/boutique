@@ -22,7 +22,15 @@
       </div>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="{% url 'list_boutique' %}">Mes Boutiques</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell"></i></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'inbox' %}">Inbox <span class="badge pull-right" id="unread-count"></span></a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="{% url 'new_message' %}">New message</a></li>
+          </ul>
+        </li>
+        <li><a href="{% url 'list_boutique' %}">My Stores</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             {{ request.user.username}} <span class="caret"></span>
@@ -31,14 +39,6 @@
             <li><a href="{% url 'edit_user_profile' %}">Account</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell"></i></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="{% url 'inbox' %}">Inbox <span class="badge pull-right" id="unread-count"></span></a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="{% url 'new_message' %}">New message</a></li>
           </ul>
         </li>
       </ul>
