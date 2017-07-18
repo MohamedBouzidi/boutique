@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render
 
 from boutique.decorators import ajax_required
 from messenger.models import Message
+from shop.models import Product
 
 
 @login_required
@@ -14,11 +15,14 @@ def inbox(request):
     conversations = Message.get_conversations(user=request.user)
     active_conversation = None
     messages = None
+    active_id = None
     if conversations:
         conversation = conversations[0]
         active_conversation = conversation['user'].username
+        active_id = conversation['user'].id
         messages = Message.objects.filter(user=request.user,
-                                          conversation=conversation['user'])
+                                          conversation=conversation['user'],
+                                          about=None)
         messages.update(is_read=True)
         for conversation in conversations:
             if conversation['user'].username == active_conversation:
@@ -27,31 +31,48 @@ def inbox(request):
     return render(request, 'messenger/inbox.html', {
         'messages': messages,
         'conversations': conversations,
+        'activeId': active_id,
         'active': active_conversation
         })
 
 
 @login_required
-def messages(request, username):
+def messages(request, username, product_id):
     conversations = Message.get_conversations(user=request.user)
     active_conversation = username
 
     messages = Message.objects.filter(user=request.user,
                                       conversation__username=username)
 
+    context = {
+        'username': username,
+    }
+
+    inbox_context = {'activeId': messages.first().conversation.id}
+
+    if product_id:
+        product = Product.objects.get(pk=product_id)
+        messages = messages.filter(about=product)
+        context['product'] = product
+        inbox_context['product'] = product
+    else:
+        messages = messages.filter(about=None)
+
+
     if request.method == 'GET' and not messages:
-        return render(request, 'messenger/new.html', {'username': username})
+        return render(request, 'messenger/new.html', context)
 
     messages.update(is_read=True)
     for conversation in conversations:
         if conversation['user'].username == username:
             conversation['unread'] = 0
 
-    return render(request, 'messenger/inbox.html', {
-        'messages': messages,
-        'conversations': conversations,
-        'active': active_conversation
-        })
+    inbox_context['messages'] = messages
+    inbox_context['conversations'] = conversations
+    inbox_context['active'] = active_conversation
+    inbox_context['activeId'] = messages.first().conversation.id
+
+    return render(request, 'messenger/inbox.html', inbox_context)
 
 
 @login_required
@@ -59,6 +80,8 @@ def new(request):
     if request.method == 'POST':
         from_user = request.user
         to_user_username = request.POST.get('to')
+        product_id = request.POST.get('product_id')
+
         try:
             to_user = User.objects.get(username=to_user_username)
 
@@ -76,9 +99,16 @@ def new(request):
         if len(message.strip()) == 0:
             return redirect('/messages/new/')
 
-        if from_user != to_user:
-            Message.send_message(from_user, to_user, message)
+        product = None
 
+        if product_id:
+            product = Product.objects.get(pk=product_id)
+
+        if from_user != to_user:
+            Message.send_message(from_user, to_user, message, about=product)
+
+        if product:
+            return redirect('/messages/{0}/{1}'.format(to_user_username, product.id))
         return redirect('/messages/{0}/'.format(to_user_username))
 
     else:
@@ -101,10 +131,16 @@ def send(request):
         to_user_username = request.POST.get('to')
         to_user = User.objects.get(username=to_user_username)
         message = request.POST.get('message')
+        product_id = request.POST.get('product_id')
+
+        product = None
+        if product_id:
+            product = Product.objects.get(pk=product_id)
+
         if len(message.strip()) == 0:
             return HttpResponse()
         if from_user != to_user:
-            msg = Message.send_message(from_user, to_user, message)
+            msg = Message.send_message(from_user, to_user, message, about=product)
             return render(request, 'messenger/includes/partial_message.html',
                           {'message': msg})
 
@@ -140,14 +176,16 @@ def check(request):
 @ajax_required
 def latest(request):
     data = {}
-    if request.GET.get('from_user'):
-        latest = Message.objects.filter(user=request.user, from_user=request.GET.get('from_user'), is_read=False).last()
-        if request.GET.get('is_read'):
-            data = {'success': True}
-            latest.is_read = True
-            latest.save()
-        else:
-            if latest:
+    from_user_id = request.GET.get('from_user')
+    if from_user_id:
+        from_user = User.objects.get(pk=from_user_id)
+        latest = Message.objects.filter(user=request.user, from_user=from_user, is_read=False).last()
+        if latest:
+            if request.GET.get('is_read'):
+                data = {'success': True}
+                latest.is_read = True
+                latest.save()
+            else:
                 data = {
                     "message": latest.message,
                     "date": str(latest.date.__format__('%b %m %H:%m')),

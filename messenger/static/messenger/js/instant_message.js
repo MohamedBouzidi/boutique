@@ -1,11 +1,13 @@
 $(function () {
   function fetch_latest () {
     var $sendMessage = $('.send-message');
+    var userId = $('#conversation_user').text();
+
     $.ajax({
       url: '/messages/latest',
       cache: false,
       data: {
-        'from_user': $('.from_user').last().text()
+        'from_user': userId
       },
       success: function (data) {
         if (data.message) {
@@ -19,19 +21,19 @@ $(function () {
                                       data.user + 
                                     "</a>" +
                                   "</h5>" +
-                                    data.message + 
+                                    data.message +
                                 "</div></li>");
           $.ajax({
             url: '/messages/latest/',
             data: {
-              'from_user': $('.from_user').last().text(),
+              'from_user': userId,
               'is_read': true,
             }
           });
         }
       },
       complete: function () {
-        window.setTimeout(fetch_latest, 1000);
+        window.setTimeout(fetch_latest, 5000);
       }
     });
   }

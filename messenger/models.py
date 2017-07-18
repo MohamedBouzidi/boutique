@@ -6,11 +6,14 @@ from django.db.models import Max
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
+from shop.models import Product
+
 
 @python_2_unicode_compatible
 class Message(models.Model):
     user = models.ForeignKey(User, related_name='+')
     message = models.TextField(max_length=1000, blank=True)
+    about = models.ForeignKey(Product, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
     conversation = models.ForeignKey(User, related_name='+')
     from_user = models.ForeignKey(User, related_name='+')
@@ -26,16 +29,18 @@ class Message(models.Model):
         return self.message
 
     @staticmethod
-    def send_message(from_user, to_user, message):
+    def send_message(from_user, to_user, message, about=None):
         message = message[:1000]
         current_user_message = Message(from_user=from_user,
                                        message=message,
+                                       about=about,
                                        user=from_user,
                                        conversation=to_user,
                                        is_read=True)
         current_user_message.save()
         Message(from_user=from_user,
                 conversation=from_user,
+                about=about,
                 message=message,
                 user=to_user).save()
 

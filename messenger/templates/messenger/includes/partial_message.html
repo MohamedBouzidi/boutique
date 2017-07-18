@@ -5,7 +5,7 @@
       {{ message.date|date:'N d G:i' }}
     </small>
     <a href="{#% url 'profile' message.from_user.username %#}#">
-      <span class="from_user">{{ message.from_user.profile.get_screen_name }}</span>
+      <span class="from_user" data-id="{{ message.from_user.id }}">{{ message.from_user.profile.get_screen_name }}</span>
     </a>
   </h5>
   {{ message.message }}

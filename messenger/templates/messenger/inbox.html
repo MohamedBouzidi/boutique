@@ -7,6 +7,11 @@
 
 {% block container %}
   {% if messages %}
+    {% if product %}
+      <h3>
+        <a href="{% url 'detail_product' product.boutique.id product.id %}">{{ product.name }}</a>
+      </h3>
+    {% endif %}
   <ul class="conversation">
     {% for message in messages %}
       <li class="message">{% include 'messenger/includes/partial_message.html' with message=message %}</li>
@@ -18,13 +23,61 @@
           {% csrf_token %}
           <input type="hidden" name="to" value="{{ active }}">
           <input class="form-control" type="text" name="message" placeholder="Write a message..." maxlength="1000" autocomplete="off">
+          {% if product %}
+          <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
+          {% endif %}
         </form>
       </div>
     </li>
   </ul>
 
+  <input type="hidden" id="conversation_user" name="conversation_user" value="{{ activeId }}">
+
   {% load static %}
   <!-- <script src="{% static 'messenger/js/instant_message.js' %}"></script> -->
+  <script>
+    $(function () {
+      function fetch_latest () {
+        var $sendMessage = $('.send-message');
+        var userId = $('#conversation_user').val();
+
+        $.ajax({
+          url: '/messages/latest',
+          cache: false,
+          data: {
+            'from_user': userId
+          },
+          success: function (data) {
+            if (data.message) {
+              $sendMessage.before("<li class='message'><img src='" + data.picture + "' class='picture'>" +
+                                    "<div>" +
+                                      "<h5>" +
+                                        "<small class='pull-right'>" +
+                                          data.date + 
+                                        "</small>" +
+                                        "<a href='#'>" +
+                                          data.user + 
+                                        "</a>" +
+                                      "</h5>" +
+                                        data.message +
+                                    "</div></li>");
+              $.ajax({
+                url: '/messages/latest/',
+                data: {
+                  'from_user': userId,
+                  'is_read': true,
+                }
+              });
+            }
+          },
+          complete: function () {
+            window.setTimeout(fetch_latest, 1000);
+          }
+        });
+      }
+      fetch_latest();
+    });
+  </script>
   
   {% else %}
     <div class="text-center">
