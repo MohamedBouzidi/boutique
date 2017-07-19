@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^(?P<boutique_id>\d+)/products/(?P<pk>\d+)/dublicate$', views.product_dublicate_view, name='dublicate_product'),
     url(r'^(?P<boutique_id>\d+)/products/(?P<pk>\d+)$', views.ProductDetailView.as_view(), name='detail_product'),
     url(r'^(?P<boutique_id>\d+)/products/(?P<pk>\d+)/state$', views.product_state_view, name='state_product'),
+    url(r'^(?P<boutique_id>\d+)/products/$', views.product_list_view, name='list_product'),
 
     # Boutique URLs
     url(r'^list$', views.BoutiqueListView.as_view(), name='list_boutique'),

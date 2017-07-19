@@ -1,10 +1,12 @@
 import json
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import CreateView, DetailView, TemplateView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+
+from boutique.decorators import ajax_required
 
 from shop.models import Product, Picture, Boutique, BusinessUser
 from shop.forms import ProductForm, PictureForm
@@ -227,3 +229,19 @@ def product_state_view(request, boutique_id, pk):
     }
 
     return JsonResponse(json.dumps(data), safe=False)
+
+
+@ajax_required
+@login_required
+def product_list_view(request, boutique_id):
+    query = request.GET.get('query')
+    boutique = Boutique.objects.get(pk=boutique_id)
+    if not not query:
+        products = Product.objects.filter(name__icontains=query, boutique=boutique)[:3]
+    else:
+        products = Product.objects.filter(boutique=boutique)[:3]
+    data = []
+    for product in products:
+        data.append(product.as_json())
+
+    return HttpResponse(json.dumps(data), content_type='application/json')

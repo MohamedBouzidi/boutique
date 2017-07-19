@@ -22,7 +22,7 @@ class BusinessUser(models.Model):
     type = models.CharField(max_length=255, choices=(('ENTERPRISE', 'Entreprise'), ('INDIVIDUAL', 'Particulier'),))
 
     def as_json(self):
-        return dict(name=self.user.username, email=self.user.email, password=self.user.password,
+        return dict(id=self.id, name=self.user.username, email=self.user.email, password=self.user.password,
                     description=self.description, picture=self.picture.url, type=self.type)
 
     def get_top_products():
@@ -42,7 +42,7 @@ class Boutique(models.Model):
     phone = models.CharField(max_length=20, blank=True)
 
     def as_json(self):
-        return dict(name=self.name, owner=self.owner.user.email, processing_time=self.processing_time,
+        return dict(id=self.id, name=self.name, owner=self.owner.user.email, processing_time=self.processing_time,
                     address=self.address, logo=self.logo.url, date=str(self.date), description=self.description,
                     facebook_link=self.facebook_link, instagram_link=self.instagram_link, phone=self.phone)
 
@@ -57,7 +57,7 @@ class Categorie(models.Model):
     label = models.CharField(max_length=255, blank=False, unique=True)
 
     def as_json(self):
-        return dict(label=self.label)
+        return dict(id=self.id, label=self.label)
 
     def __unicode__(self):
         return self.label
@@ -70,7 +70,7 @@ class Type(models.Model):
     label = models.CharField(max_length=255, blank=False, unique=True)
 
     def as_json(self):
-        return dict(label=self.label)
+        return dict(id=self.id, label=self.label)
 
     def __unicode__(self):
         return self.label
@@ -95,7 +95,7 @@ class Product(models.Model):
         ordering = ('-date',)
 
     def as_json(self):
-        return dict(name=self.name, image=self.image.url, price=self.price,
+        return dict(id=self.id, name=self.name, image=self.image.url, price=self.price,
                     description=self.description, date=str(self.date), active=self.active, 
                     quantite=self.quantite, boutique=self.boutique.as_json(), 
                     categorie=self.categorie.as_json(), type=self.type.as_json())

@@ -1,11 +1,11 @@
 {% load static %}
 <a href="#">
     <div class="thumbnail product-small pull-right" data-product-id="{{ product.id }}" data-boutique-id="{{ product.boutique.id }}" style="overflow: auto;">
-        <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive-thumbnail">
+        <img src="{{ MEDIA_URL }}{{ product.image.url }}" alt="{{ product.name }}" class="img-responsive-thumbnail image">
       <div class="caption">
         <h5 class="title">{{ product.name }}</h5>
         <span class="badge">{{ product.price }} DT</span>
-        <p>{{ product.categorie.label }}</p>
+        <p class="categorie">{{ product.categorie.label }}</p>
       </div>
     </div>
 </a>
