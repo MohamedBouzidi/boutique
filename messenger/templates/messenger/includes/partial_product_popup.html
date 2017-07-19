@@ -1,0 +1,26 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Product Message</h4>
+        <input class="form-control typeahead" type="text" id="product" name="product" placeholder="Search product" style="width: 550px;">
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                {% for product in products %}
+                  {% include 'partials/product_small.html' with product=product %}
+                {% endfor %}
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% load static %}
+<script src="{% static 'messenger/js/product_message.js' %}"></script>
