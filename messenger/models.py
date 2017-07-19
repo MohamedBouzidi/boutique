@@ -12,6 +12,7 @@ from shop.models import Product
 @python_2_unicode_compatible
 class Message(models.Model):
     user = models.ForeignKey(User, related_name='+')
+    product = models.ForeignKey(Product, blank=True, null=True)
     message = models.TextField(max_length=1000, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     conversation = models.ForeignKey(User, related_name='+')
@@ -28,17 +29,19 @@ class Message(models.Model):
         return self.message
 
     @staticmethod
-    def send_message(from_user, to_user, message):
+    def send_message(from_user, to_user, message='', product=None):
         message = message[:1000]
         current_user_message = Message(from_user=from_user,
                                        message=message,
                                        user=from_user,
+                                       product=product,
                                        conversation=to_user,
                                        is_read=True)
         current_user_message.save()
         Message(from_user=from_user,
                 conversation=from_user,
                 message=message,
+                product=product,
                 user=to_user).save()
 
         return current_user_message

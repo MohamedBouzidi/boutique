@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 
@@ -27,11 +28,14 @@ def inbox(request):
             if conversation['user'].username == active_conversation:
                 conversation['unread'] = 0
 
+    products = Product.objects.all()[:3]
+
     return render(request, 'messenger/inbox.html', {
         'messages': messages,
         'conversations': conversations,
         'activeId': active_id,
-        'active': active_conversation
+        'active': active_conversation,
+        'products': products
         })
 
 
@@ -43,8 +47,11 @@ def messages(request, username):
     messages = Message.objects.filter(user=request.user,
                                       conversation__username=username)
 
+    products = Product.objects.all()[:3]
+
     context = {
         'username': username,
+        'products': products
     }
 
     inbox_context = {'activeId': messages.first().conversation.id}
@@ -61,6 +68,7 @@ def messages(request, username):
     inbox_context['conversations'] = conversations
     inbox_context['active'] = active_conversation
     inbox_context['activeId'] = messages.first().conversation.id
+    inbox_context['products'] = products
 
     return render(request, 'messenger/inbox.html', inbox_context)
 
@@ -127,6 +135,41 @@ def send(request):
 
 @login_required
 @ajax_required
+def send_product(request):
+    data = {}
+    if request.method == 'POST':
+        from_user = request.user
+        to_user_id = request.POST.get('to')
+        to_user = User.objects.get(pk=to_user_id)
+
+        product_id = request.POST.get('product_id')
+        product = Product.objects.get(pk=product_id)
+
+        if product and from_user != to_user:
+            msg = Message.send_message(from_user, to_user, product=product)
+
+            date = str(msg.date.__format__('%b %m %H:%m'))
+            picture = str(msg.product.image.url)
+            link = str(reverse_lazy('detail_product', kwargs={'boutique_id': msg.product.boutique.id, 'pk': msg.product.id}))
+            name = str(msg.product.name)
+            user = {
+                'name': str(msg.user.username),
+                'picture': str(msg.user.profile.get_picture())
+            }
+
+            data = {
+                'picture': picture,
+                'name': name,
+                'link': link,
+                'date': date,
+                'user': user
+            }
+
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+
+@login_required
+@ajax_required
 def users(request):
     users = User.objects.filter(is_active=True)
     dump = []
@@ -162,10 +205,27 @@ def latest(request):
                 latest.is_read = True
                 latest.save()
             else:
-                data = {
-                    "message": latest.message,
-                    "date": str(latest.date.__format__('%b %m %H:%m')),
-                    "user": latest.conversation.username,
-                    "picture": latest.conversation.profile.get_picture()
-                }
+                if not not latest.message:
+                    data = {
+                        "message": latest.message,
+                        "date": str(latest.date.__format__('%b %m %H:%m')),
+                        "user": latest.conversation.username,
+                        "picture": latest.conversation.profile.get_picture()
+                    }
+                elif latest.product:
+                    picture = str(latest.product.image.url)
+                    name = str(latest.product.name)
+                    link = str(reverse_lazy('detail_product', kwargs={'boutique_id': latest.product.boutique.id, 'pk': latest.product.id}))
+                    date = str(latest.date.__format__('%b %m %H:%m'))
+                    user = {
+                        'name': latest.from_user.username,
+                        'picture': str(latest.from_user.profile.get_picture())
+                    }
+                    data = {
+                        'picture': picture,
+                        'name': name,
+                        'link': link,
+                        'date': date,
+                        'user': user
+                    }
     return HttpResponse(json.dumps(data), content_type='application/json')

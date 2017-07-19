@@ -8,5 +8,13 @@
       <span class="from_user" data-id="{{ message.from_user.id }}">{{ message.from_user.profile.get_screen_name }}</span>
     </a>
   </h5>
+  {% if message.message %}
   {{ message.message }}
+  {% endif %}
+  {% if message.product %}
+    <a href="{% url 'detail_product' message.product.boutique.id message.product.id %}">
+        <img src="{{ message.product.image.url }}" alt="{{ message.product.name }}" class="img-responsive-thumbnail">
+        <h4>{{ message.product.name }}</h4>
+    </a>
+  {% endif %}
 </div>
