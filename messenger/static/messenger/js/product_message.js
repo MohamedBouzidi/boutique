@@ -36,21 +36,7 @@ $(function() {
       },
       success: function (data) {
         $('.send-message')
-        .before("<li class='message'><img src='" + data.user.picture + "' class='picture'>"+
-                "<div>" +
-                  "<h5>" +
-                    "<small class='pull-right'>" +
-                      data.date +
-                    "</small>" +
-                    "<a href='#'>" +
-                      data.user.name + 
-                    "</a>" +
-                  "</h5>" +
-                    "<a href='" + data.link + "'>" +
-                      "<img src='" + data.picture + "' class='img-responsive-thumbnail'>" +
-                      "<h4>" + data.name + "</h4>" + 
-                    "</a>" +
-                "</div></li>");
+        .before(data);
         $('#myModal').modal('toggle');
       }
     });

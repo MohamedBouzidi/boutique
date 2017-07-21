@@ -7,31 +7,35 @@ $(function () {
     }
   }
 
-  function updateProduct(product, data) {
-    product.attr('data-product-id', data.id);
-    product.attr('data-boutique-id', data.boutique.id);
-    product.children('.image').attr('src', data.image);
-    product.children('.image').attr('alt', data.name);
-    product.children('.caption').children('.title').html(data.name);
-    product.children('.caption').children('badge').html(data.price + ' DT');
-    product.children('.caption').children('categorie').html(data.categorie.label);
-  }
-
+  var $pager = $('.pager')
   var boutiqueId = $('.product-small').first().attr('data-boutique-id');
 
-  $('#product-search').on('keyup', debounce(function () {
+  function search(page) {
     $.ajax({
       url: '/boutique/' + boutiqueId + '/products/',
       type: 'GET',
       data: {
-        query: $('#product-search').val()
+        query: $('#product-search').val(),
+        page: page
       },
       cache: false,
       success: function (data) {
-        $('.product-small').each(function (i) {
-          updateProduct($(this), data[i]);
-        });
+        $('.products').hide().html(data).fadeIn('slow');
+        $pager.attr('data-current-page', page);
       }
     });
-  }, 500));  
+  }
+
+  $('#product-search').on('keyup', debounce(function () {
+    var page = parseInt($pager.attr('data-current-page'));
+    search(page)
+  }, 500)); 
+  $('#next').on('click', function () {
+    var page = parseInt($pager.attr('data-current-page'));
+    search(page+1);
+  }); 
+  $('#prev').on('click', function () {
+    var page = parseInt($pager.attr('data-current-page'));
+    search(page-1);
+  }); 
 });

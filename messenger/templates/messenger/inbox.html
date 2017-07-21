@@ -17,18 +17,19 @@
         <li class="send-message">
           <img src="{{ user.profile.get_picture }}" class="picture">
           <div style="margin-top: .3em">
-            <form role="form" method="post" action="{% url 'send_message' %}" id="send">
+            <form role="form" method="post" action="{% url 'send_message' %}" id="send" enctype="multipart/form-data">
               {% csrf_token %}
-              <input type="hidden" name="to" value="{{ active }}">
+              <input type="hidden" name="to" id="to" value="{{ active }}">
               <input class="form-control" type="text" name="message" id="new-message" placeholder="Write a message..." maxlength="1000" autocomplete="off">
-              <div class="btn-group pull-right">
+              <div class="btn-group">
                 <label for="attach" class="btn btn-sm btn-raised btn-primary">
-                  <input type="file" id="attach" style="display: none;">
+                  <input type="file" id="attach" name="attachement" style="display: none;">
                   <i class="fa fa-paperclip"></i>
                 </label>
                 <button type="button" class="btn btn-raised btn-sm btn-primary" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i></button>
-                <button type="button" class="btn btn-raised btn-sm btn-primary">Send</button>
+                <button type="submit" class="btn btn-raised btn-sm btn-primary">Send</button>
               </div>
+              <img src="" class="pull-right" id="attach-frame" style="width: auto; height: 80px;" alt="">
               {% if product %}
               <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
               {% endif %}
@@ -40,6 +41,25 @@
       {% include 'messenger/includes/partial_product_popup.html' with products=products %}
 
     <input type="hidden" id="conversation_user" name="conversation_user" value="{{ activeId }}">
+
+    <script>
+      $(function () {
+        function readURL(input) {
+          if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+              $('#attach-frame').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+          }
+        }
+        $('#attach').on('change', function () {
+          readURL(this);
+        });
+      });
+    </script>
 
     {% load static %}
     <!-- <script src="{% static 'messenger/js/instant_message.js' %}"></script> -->

@@ -1,5 +1,6 @@
 import json
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
@@ -7,9 +8,13 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 
 from boutique.decorators import ajax_required
-from messenger.models import Message
+from messenger.forms import AttachementForm
+from messenger.models import Message, Attachement
 from shop.models import Product
 
+
+def get_products():
+    return Product.objects.all()[:3]
 
 @login_required
 def inbox(request):
@@ -28,15 +33,13 @@ def inbox(request):
             if conversation['user'].username == active_conversation:
                 conversation['unread'] = 0
 
-    products = Product.objects.all()[:3]
-
     return render(request, 'messenger/inbox.html', {
         'messages': messages,
         'conversations': conversations,
         'activeId': active_id,
         'active': active_conversation,
-        'products': products
-        })
+        'products': get_products()
+    })
 
 
 @login_required
@@ -47,11 +50,9 @@ def messages(request, username):
     messages = Message.objects.filter(user=request.user,
                                       conversation__username=username)
 
-    products = Product.objects.all()[:3]
-
     context = {
         'username': username,
-        'products': products
+        'products': get_products()
     }
 
     inbox_context = {'activeId': messages.first().conversation.id}
@@ -113,9 +114,9 @@ def delete(request):
 
 
 @login_required
-@ajax_required
 def send(request):
     if request.method == 'POST':
+        msg = None
         from_user = request.user
         to_user_username = request.POST.get('to')
         to_user = User.objects.get(username=to_user_username)
@@ -123,20 +124,28 @@ def send(request):
 
         if len(message.strip()) == 0:
             return HttpResponse()
+
         if from_user != to_user:
             msg = Message.send_message(from_user, to_user, message)
-            return render(request, 'messenger/includes/partial_message.html',
-                          {'message': msg})
+            # form = AttachementForm(request.POST, request.FILES)
 
-        return HttpResponse()
+            # if form.is_valid():
+            #     obj = form.save(commit=False)
+            #     obj.message = msg
+            #     obj.save()
+            # else:
+            #     print('form is invalid')
+
+        return render(request, 'messenger/includes/partial_message.html', {'message': msg})
     else:
+        print('This is a bad request inside send view')
         return HttpResponseBadRequest()
 
 
 @login_required
 @ajax_required
 def send_product(request):
-    data = {}
+    msg = None
     if request.method == 'POST':
         from_user = request.user
         to_user_id = request.POST.get('to')
@@ -148,24 +157,7 @@ def send_product(request):
         if product and from_user != to_user:
             msg = Message.send_message(from_user, to_user, product=product)
 
-            date = str(msg.date.__format__('%b %m %H:%m'))
-            picture = str(msg.product.image.url)
-            link = str(reverse_lazy('detail_product', kwargs={'boutique_id': msg.product.boutique.id, 'pk': msg.product.id}))
-            name = str(msg.product.name)
-            user = {
-                'name': str(msg.user.username),
-                'picture': str(msg.user.profile.get_picture())
-            }
-
-            data = {
-                'picture': picture,
-                'name': name,
-                'link': link,
-                'date': date,
-                'user': user
-            }
-
-    return HttpResponse(json.dumps(data), content_type='application/json')
+    return render(request, 'messenger/includes/partial_message.html', {'message': msg})
 
 
 @login_required
@@ -194,7 +186,7 @@ def check(request):
 @login_required
 @ajax_required
 def latest(request):
-    data = {}
+    latest = None
     from_user_id = request.GET.get('from_user')
     if from_user_id:
         from_user = User.objects.get(pk=from_user_id)
@@ -204,28 +196,4 @@ def latest(request):
                 data = {'success': True}
                 latest.is_read = True
                 latest.save()
-            else:
-                if not not latest.message:
-                    data = {
-                        "message": latest.message,
-                        "date": str(latest.date.__format__('%b %m %H:%m')),
-                        "user": latest.conversation.username,
-                        "picture": latest.conversation.profile.get_picture()
-                    }
-                elif latest.product:
-                    picture = str(latest.product.image.url)
-                    name = str(latest.product.name)
-                    link = str(reverse_lazy('detail_product', kwargs={'boutique_id': latest.product.boutique.id, 'pk': latest.product.id}))
-                    date = str(latest.date.__format__('%b %m %H:%m'))
-                    user = {
-                        'name': latest.from_user.username,
-                        'picture': str(latest.from_user.profile.get_picture())
-                    }
-                    data = {
-                        'picture': picture,
-                        'name': name,
-                        'link': link,
-                        'date': date,
-                        'user': user
-                    }
-    return HttpResponse(json.dumps(data), content_type='application/json')
+    return render(request, 'messenger/includes/partial_message.html', {'message': latest})

@@ -1,10 +1,15 @@
 $(function () {
   $("#send").submit(function () {
+    
+    var data = new FormData(this);
+
     $.ajax({
       url: '/messages/send/',
-      data: $("#send").serialize(),
+      data: data,
       cache: false,
-      type: 'post',
+      type: 'POST',
+      contentType: false,
+      processData: false,
       success: function (data) {
         $(".send-message").before(data);
         $("input[name='message']").val('');

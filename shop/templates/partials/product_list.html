@@ -1,0 +1,7 @@
+{% if products %}
+  {% for product in products %}
+  <div class="col-md-4">
+    {% include 'partials/product_small.html' with product=product %}
+  </div>
+  {% endfor %}
+{% endif %}

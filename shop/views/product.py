@@ -1,4 +1,6 @@
 import json
+from django.shortcuts import render
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import CreateView, DetailView, TemplateView
 from django.views.generic.edit import UpdateView, DeleteView
@@ -235,13 +237,30 @@ def product_state_view(request, boutique_id, pk):
 @login_required
 def product_list_view(request, boutique_id):
     query = request.GET.get('query')
+    page = request.GET.get('page')
     boutique = Boutique.objects.get(pk=boutique_id)
-    if not not query:
-        products = Product.objects.filter(name__icontains=query, boutique=boutique)[:3]
-    else:
-        products = Product.objects.filter(boutique=boutique)[:3]
-    data = []
-    for product in products:
-        data.append(product.as_json())
 
-    return HttpResponse(json.dumps(data), content_type='application/json')
+    if not not query:
+        product_list = Product.objects.filter(name__icontains=query, boutique=boutique)
+    else:
+        product_list = Product.objects.filter(boutique=boutique)
+
+    paginator = Paginator(product_list, 3)
+
+    try:
+        page = int(page)
+    except ValueError:
+        print('page not an integer')
+        page = 1
+
+    if page > paginator.num_pages or page < 0:
+        page = 1
+
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+
+    return render(request, 'partials/product_list.html', {'products': products})
