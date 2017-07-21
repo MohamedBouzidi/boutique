@@ -69,7 +69,7 @@ def messages(request, username):
     inbox_context['conversations'] = conversations
     inbox_context['active'] = active_conversation
     inbox_context['activeId'] = messages.first().conversation.id
-    inbox_context['products'] = products
+    inbox_context['products'] = get_products()
 
     return render(request, 'messenger/inbox.html', inbox_context)
 

@@ -28,7 +28,7 @@ $(function () {
 
   $('#product-search').on('keyup', debounce(function () {
     var page = parseInt($pager.attr('data-current-page'));
-    search(page)
+    search(1)
   }, 500)); 
   $('#next').on('click', function () {
     var page = parseInt($pager.attr('data-current-page'));
