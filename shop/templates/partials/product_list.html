@@ -4,4 +4,5 @@
     {% include 'partials/product_small.html' with product=product %}
   </div>
   {% endfor %}
+  <input type="hidden" name="page" class="page" value="{{ page }}">
 {% endif %}

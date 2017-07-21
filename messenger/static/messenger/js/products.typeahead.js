@@ -21,6 +21,7 @@ $(function () {
       cache: false,
       success: function (data) {
         $('.products').hide().html(data).fadeIn('slow');
+        page = $(".page").val();
         $pager.attr('data-current-page', page);
       }
     });

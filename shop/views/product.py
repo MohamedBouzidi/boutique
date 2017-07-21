@@ -253,8 +253,11 @@ def product_list_view(request, boutique_id):
         print('page not an integer')
         page = 1
 
-    if page > paginator.num_pages or page < 0:
+    if page > paginator.num_pages:
         page = 1
+
+    if page < 1:
+        page = paginator.num_pages 
 
     try:
         products = paginator.page(page)
@@ -263,4 +266,4 @@ def product_list_view(request, boutique_id):
     except EmptyPage:
         products = paginator.page(paginator.num_pages)
 
-    return render(request, 'partials/product_list.html', {'products': products})
+    return render(request, 'partials/product_list.html', {'products': products, 'page': page})
