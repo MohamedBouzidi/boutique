@@ -4,5 +4,28 @@
     {% include 'partials/product_small.html' with product=product %}
   </div>
   {% endfor %}
+
+  <script>
+  $(function () {
+    $('.product-small').on('click', function () {
+      var $this = $(this);
+      var boutiqueId = $this.attr('data-boutique-id');
+      var productId = $this.attr('data-product-id');
+      $.ajax({
+        url: '/messages/send/product/',
+        type: 'POST',
+        data: {
+          'to': $('#conversation_user').val(),
+          'product_id': $this.attr('data-product-id')
+        },
+        success: function (data) {
+          $('.send-message')
+          .before(data);
+          $('#myModal').modal('toggle');
+        }
+      });
+    });
+  });
+  </script>
   <input type="hidden" name="page" class="page" value="{{ page }}">
 {% endif %}
