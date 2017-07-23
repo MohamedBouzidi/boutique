@@ -74,5 +74,5 @@ class Message(models.Model):
 
 
 class Attachement(models.Model):
-    message = models.OneToOneField(Message, on_delete=models.CASCADE, blank=True, null=True)
+    message = models.OneToOneField(Message, on_delete=models.CASCADE)
     attachement = models.ImageField(upload_to=get_message_attachement_link)

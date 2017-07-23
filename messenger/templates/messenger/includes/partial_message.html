@@ -9,10 +9,18 @@
       <span class="from_user" data-id="{{ message.from_user.id }}">{{ message.from_user.profile.get_screen_name }}</span>
     </a>
   </h5>
-  {% if message.message %}
-  {{ message.message }}
-    
+  
+  {% if message.attachement %}
+      <div style="overflow: auto;">
+        <img class="img-responsive-thumbnail" style="float: left;" src="{{ MEDIA_URL }}{{ message.attachement.attachement.url }}" alt="{{ message.date }}">
+        <span style="float: left; padding-left: 20px;">{{ message.message }}</span>
+      </div>
   {% endif %}
+
+  {% if message.message and not message.attachement %}
+  {{ message.message }}
+  {% endif %}
+
   {% if message.product %}
     <a href="{% url 'detail_product' message.product.boutique.id message.product.id %}">
         <img src="{{ message.product.image.url }}" alt="{{ message.product.name }}" class="img-responsive-thumbnail">

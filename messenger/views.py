@@ -127,14 +127,15 @@ def send(request):
 
         if from_user != to_user:
             msg = Message.send_message(from_user, to_user, message)
-            # form = AttachementForm(request.POST, request.FILES)
+            form = AttachementForm(request.POST, request.FILES)
 
-            # if form.is_valid():
-            #     obj = form.save(commit=False)
-            #     obj.message = msg
-            #     obj.save()
-            # else:
-            #     print('form is invalid')
+            if form.is_valid():
+                obj = form.save(commit=False)
+                obj.message = msg
+                print(msg.attachement)
+                obj.save()
+            else:
+                print('form is invalid')
 
         return render(request, 'messenger/includes/partial_message.html', {'message': msg})
     else:
