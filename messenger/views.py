@@ -13,8 +13,8 @@ from messenger.models import Message, Attachement
 from shop.models import Product
 
 
-def get_products():
-    return Product.objects.all()[:3]
+def get_products(user_id):
+    return Product.objects.filter(boutique__owner__user__pk=user_id)[:3] or Product.objects.all()[:3]
 
 @login_required
 def inbox(request):
@@ -38,7 +38,7 @@ def inbox(request):
         'conversations': conversations,
         'activeId': active_id,
         'active': active_conversation,
-        'products': get_products()
+        'products': get_products(active_id)
     })
 
 
@@ -49,13 +49,13 @@ def messages(request, username):
 
     messages = Message.objects.filter(user=request.user,
                                       conversation__username=username)
+    active_id = messages.first().conversation.id
 
     context = {
         'username': username,
-        'products': get_products()
+        'products': get_products(active_id)
     }
-
-    inbox_context = {'activeId': messages.first().conversation.id}
+    inbox_context = {}
 
     if request.method == 'GET' and not messages:
         return render(request, 'messenger/new.html', context)
@@ -68,8 +68,8 @@ def messages(request, username):
     inbox_context['messages'] = messages
     inbox_context['conversations'] = conversations
     inbox_context['active'] = active_conversation
-    inbox_context['activeId'] = messages.first().conversation.id
-    inbox_context['products'] = get_products()
+    inbox_context['activeId'] = active_id
+    inbox_context['products'] = get_products(active_id)
 
     return render(request, 'messenger/inbox.html', inbox_context)
 
