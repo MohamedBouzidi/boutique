@@ -46,10 +46,10 @@ def inbox(request):
 def messages(request, username):
     conversations = Message.get_conversations(user=request.user)
     active_conversation = username
+    active_id = User.objects.get(username=username).id
 
     messages = Message.objects.filter(user=request.user,
                                       conversation__username=username)
-    active_id = messages.first().conversation.id
 
     context = {
         'username': username,
