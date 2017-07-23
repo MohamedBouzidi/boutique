@@ -12,6 +12,8 @@ $(function () {
       processData: false,
       success: function (data) {
         $(".send-message").before(data);
+        $("input[name='attachement']").val('');
+        $("#attach-frame").attr("src", "");
         $("input[name='message']").val('');
         $("input[name='message']").focus();
       }
