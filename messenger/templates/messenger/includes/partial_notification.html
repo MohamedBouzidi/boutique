@@ -1,0 +1,15 @@
+<div class="notification" style="padding: 5px 10px;">
+    <a href="#">
+        <div class="row">
+            <div class="col-md-2">
+                <img src="{{ MEDIA_URL }}{{ notification.from_user.profile.get_picture }}" alt="{{ notification.from_user.username }}" class="img-responsive-small">
+            </div>
+            <div class="col-md-10" style="color: black;">
+                <h4>{{ notification.get_notification_header | safe }}</h4>
+                <p>{{ notification.get_notification_text | safe }}</p>
+                <small>{{ notification.date }}</small>
+            </div>
+        </div>
+    </a>
+    <hr>
+</div>

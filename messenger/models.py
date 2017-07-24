@@ -102,6 +102,12 @@ class Notification(models.Model):
     def __str__(self):
         return self.get_notification_text()
 
+    def get_notification_header(self):
+        from_user_link = reverse_lazy('messages', kwargs={'username': self.from_user.username})
+        product_link = reverse_lazy('detail_product', kwargs={'boutique_id': self.product.boutique.id, 'pk': self.product.id})
+        if self.type in [self.NORMAL, self.SMILE, self.LOVE, self.WISH]:
+            return "<a href='{}'>{}</a> reacted to <a href='{}'>{}</a>".format(from_user_link, self.from_user.username, product_link, self.product.name)
+
     def get_notification_text(self):
         product_link = reverse_lazy('detail_product', kwargs={'boutique_id': self.product.boutique.id, 'pk': self.product.id})
         if self.type == self.NORMAL:

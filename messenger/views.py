@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 
 from boutique.decorators import ajax_required
 from messenger.forms import AttachementForm
-from messenger.models import Message, Attachement
+from messenger.models import Message, Attachement, Notification
 from shop.models import Product
 
 
@@ -204,3 +204,13 @@ def latest(request):
                 latest.is_read = True
                 latest.save()
     return render(request, 'messenger/includes/partial_message.html', {'message': latest})
+
+
+@login_required
+@ajax_required
+def notification(request):
+    if request.method == 'GET':
+        notifications = request.user.profile.get_all_notifications()
+        return render(request, 'messenger/includes/notification_list.html', {'notifications': notifications})
+    else:
+        return HttpResponse('post notification')
