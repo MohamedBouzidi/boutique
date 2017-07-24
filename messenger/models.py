@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import os
 
 from django.utils import timezone
+from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
@@ -76,3 +77,47 @@ class Message(models.Model):
 class Attachement(models.Model):
     message = models.OneToOneField(Message, on_delete=models.CASCADE)
     attachement = models.ImageField(upload_to=get_message_attachement_link)
+
+
+class Notification(models.Model):
+    NORMAL = 'normal'
+    SMILE = 'smile'
+    LOVE = 'love'
+    WISH = 'wish'
+
+    NOTIFICATION_TYPES = (
+        (NORMAL, 'normal'),
+        (SMILE, 'smile'),
+        (LOVE, 'love'),
+        (WISH, 'wish'),
+    )
+
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    type = models.CharField(max_length=255, choices=NOTIFICATION_TYPES)
+    date = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.get_notification_text()
+
+    def get_notification_text(self):
+        product_link = reverse_lazy('detail_product', kwargs={'boutique_id': self.product.boutique.id, 'pk': self.product.id})
+        if self.type == self.NORMAL:
+            return "{} has reacted with Normal to your <a href='{}'>product</a>".format(self.from_user.username, product_link)
+        elif self.type == self.SMILE:
+            return "{} has reacted with Smile to your <a href='{}'>product</a>".format(self.from_user.username, product_link)
+        elif self.type == self.LOVE:
+            return "{} loves your <a href='{}'>product</a>".format(self.from_user.username, product_link)
+        elif self.type == self.WISH:
+            return "{} added your <a href='{}'>product</a> to their wish list".format(self.from_user.username, product_link)
+
+    @staticmethod
+    def send(from_user, to_user, product, type):
+        notification = Notification(from_user=from_user,
+                                    to_user=to_user,
+                                    product=product,
+                                    type=type).save()
+        return notification
+
