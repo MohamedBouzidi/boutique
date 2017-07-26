@@ -26,8 +26,13 @@ $(function () {
   $('.reaction').on('click', function () {
     var $this = $(this);
     var id = $this.attr('data-id');
+    var reaction = $this.attr('data-reaction');
     $.ajax({
       url: '/boutique/react/' + id,
+      type: 'GET',
+      data: {
+        reaction: reaction,
+      },
       success: function (likes) {
         if (likes.count > 0) {
           $this.siblings('.likes').html(likes.count +  ' like(s)');
