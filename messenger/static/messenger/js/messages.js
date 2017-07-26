@@ -2,6 +2,7 @@ $(function () {
   $("#send").submit(function () {
     
     var data = new FormData(this);
+    var $conversation = $('.conversation');
 
     $.ajax({
       url: '/messages/send/',
@@ -11,7 +12,12 @@ $(function () {
       contentType: false,
       processData: false,
       success: function (data) {
-        $(".send-message").before(data);
+        $conversation.append(data);
+
+        $conversation.stop().animate({
+          scrollTop: document.getElementById('conversation').scrollHeight
+        }, 800);
+        
         $("input[name='attachement']").val('');
         $("#attach-frame").attr("src", "");
         $("input[name='message']").val('');

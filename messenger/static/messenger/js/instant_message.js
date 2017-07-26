@@ -1,6 +1,6 @@
 $(function () {
       function fetch_latest () {
-        var $sendMessage = $('.send-message');
+        var $conversation = $('.conversation');
         var userId = $('#conversation_user').val();
 
         $.ajax({
@@ -12,7 +12,12 @@ $(function () {
           success: function (data) {
             var message_recieved = false;
             if (data) {
-              $sendMessage.before(data);
+              $conversation.append(data);
+
+              $conversation.stop().animate({
+                scrollTop: document.getElementById('conversation').scrollHeight
+              }, 800);
+              
               $.ajax({
                 url: '/messages/latest/',
                 data: {

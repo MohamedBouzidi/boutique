@@ -9,14 +9,30 @@
   {% if messages %}
   <div class="row" style="overflow: auto;">
     <div class="col-md-12">
+
+      <style>
+        .conversation {
+          height: 45vh;
+          overflow-y: scroll;
+          margin-bottom: 25px;
+        }
+        .send-message img {
+          width: 60px;
+          height: 60px;
+        }
+      </style>
         
-      <ul class="conversation">
+      <ul class="conversation" id="conversation">
         {% for message in messages %}
           <li class="message">{% include 'messenger/includes/partial_message.html' with message=message %}</li>
         {% endfor %}
-        <li class="send-message">
-          <img src="{{ user.profile.get_picture }}" class="picture">
-          <div style="margin-top: .3em">
+      </ul>
+      <div class="send-message">
+        <div class="row">
+          <div class="col-md-1">
+            <img src="{{ user.profile.get_picture }}" class="picture">
+          </div>
+          <div class="col-md-11">
             <form role="form" method="post" action="{% url 'send_message' %}" id="send" enctype="multipart/form-data">
               {% csrf_token %}
               <input type="hidden" name="to" id="to" value="{{ active }}">
@@ -35,8 +51,8 @@
               {% endif %}
             </form>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
       {% include 'messenger/includes/partial_product_popup.html' with products=products %}
 

@@ -27,6 +27,8 @@ $(function() {
     var $this = $(this);
     var boutiqueId = $this.attr('data-boutique-id');
     var productId = $this.attr('data-product-id');
+    var $conversation = $('.conversation');
+
     $.ajax({
       url: '/messages/send/product/',
       type: 'POST',
@@ -35,8 +37,12 @@ $(function() {
         'product_id': $this.attr('data-product-id')
       },
       success: function (data) {
-        $('.send-message')
-        .before(data);
+        $conversation.append(data);
+
+        $conversation.stop().animate({
+          scrollTop: document.getElementById('conversation').scrollHeight
+        }, 800);
+
         $('#myModal').modal('toggle');
       }
     });
