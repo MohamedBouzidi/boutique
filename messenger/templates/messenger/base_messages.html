@@ -20,7 +20,7 @@
             <div class="col-md-3">
               {% include 'messenger/includes/partial_conversations.html' with conversations=conversations active=active %}
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9" id="messages-container">
               {% block container %}
               {% endblock container %}
             </div>
@@ -29,4 +29,27 @@
       </div>
     </div>
   </div>
+
+  <script>
+    $(function () {
+      $("#conversation-list a").on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var userId = $this.attr('data-user-id');
+
+        $.ajax({
+          url: '/messages/ajax/',
+          type: 'GET',
+          data: {
+            'userId': userId
+          },
+          success: function (data) {
+            $("#messages-container").hide().html(data).fadeIn();
+            $('.active-conversation').toggleClass('active-conversation');
+            $this.toggleClass('active-conversation');
+          }
+        });
+      });
+    });
+  </script>
 {% endblock content %}

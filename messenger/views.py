@@ -4,6 +4,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 
@@ -72,6 +73,23 @@ def messages(request, username):
     inbox_context['products'] = get_products(active_id)
 
     return render(request, 'messenger/inbox.html', inbox_context)
+
+
+@login_required
+def messages_ajax(request):
+    if request.method == 'GET':
+        user_id = request.GET.get('userId')
+        messages = None
+        if not not user_id:
+            conversation = User.objects.get(pk=user_id)
+            messages = Message.objects.filter(user=request.user, conversation=conversation)
+            context = {
+                'activeId': user_id,
+                'active': conversation.username,
+                'products': get_products(user_id),
+                'messages': messages
+            }
+    return render(request, 'messenger/includes/conversation.html', context)
 
 
 @login_required

@@ -4,33 +4,5 @@
     {% include 'partials/product_small.html' with product=product %}
   </div>
   {% endfor %}
-
-  <script>
-  $(function () {
-    $('.product-small').on('click', function () {
-      var $this = $(this);
-      var boutiqueId = $this.attr('data-boutique-id');
-      var productId = $this.attr('data-product-id');
-      var $conversation = $('.conversation');
-      $.ajax({
-        url: '/messages/send/product/',
-        type: 'POST',
-        data: {
-          'to': $('#conversation_user').val(),
-          'product_id': $this.attr('data-product-id')
-        },
-        success: function (data) {
-          $conversation.append(data);
-
-          $conversation.stop().animate({
-            scrollTop: document.getElementById('conversation').scrollHeight
-          }, 800);
-
-          $('#myModal').modal('toggle');
-        }
-      });
-    });
-  });
-  </script>
   <input type="hidden" name="page" class="page" value="{{ page }}">
 {% endif %}

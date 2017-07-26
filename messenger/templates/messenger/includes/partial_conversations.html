@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="list-group">
+<div class="list-group" id="conversation-list">
   {% comment %}
   <a href="{% url 'inbox' %}" class="list-group-item{% if active == 'inbox' %} active{% endif %}">
     <span>{% trans 'Inbox' %}</span>
@@ -10,7 +10,7 @@
 
   {% for conversation in conversations %}
     <a href="{% url 'messages' conversation.user.username %}" 
-      class="list-group-item" style="padding: 10px 25px; {% if active == conversation.user.username %}background: #ddd;{% endif %}">
+      class="list-group-item {% if conversation.user.id == activeId %}active-conversation{% endif %}" style="padding: 10px 25px;" data-user-id={{ conversation.user.id }}>
       <img src="{{ conversation.user.profile.get_picture }}" class="conversation-portrait">
       <span style="color: black;">{{ conversation.user.profile.get_screen_name }}</span>
       {% if conversation.unread > 0 %}

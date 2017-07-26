@@ -23,7 +23,7 @@ $(function() {
        } 
   });
 
-  $('.product-small').on('click', function () {
+  $('.products').on('click', '.product-small', function () {
     var $this = $(this);
     var boutiqueId = $this.attr('data-boutique-id');
     var productId = $this.attr('data-product-id');
