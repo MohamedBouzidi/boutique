@@ -1,5 +1,5 @@
 $(function () {
-  $("#send").submit(function () {
+  $("#messages-container").on('submit', '#send', function () {
     
     var data = new FormData(this);
     var $conversation = $('.conversation');
