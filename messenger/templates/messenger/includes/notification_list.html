@@ -1,10 +1,17 @@
 {% if notifications %}
+    <div class="notifications-header">
+        <a href="#">
+            {{ notifications.count }} notifications
+        </a>
+    </div>
+
     {% for notification in notifications %}
         {% include 'messenger/includes/partial_notification.html' with notification=notification %}
+        <hr>
     {% endfor %}
 
-    <div class="notification text-center">
-        <a href="#" style="display: block; margin: 0; padding: 20px 15px; background-color: #eee;">
+    <div class="show-notifications text-center">
+        <a href="{% url 'notifications' %}">
             View all notifications
         </a>
     </div>

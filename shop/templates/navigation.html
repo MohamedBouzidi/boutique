@@ -1,3 +1,45 @@
+<style>
+  #notifications {
+    width: 450px;
+    padding: 0;
+    margin-top: 10px;
+    box-shadow: 4px 4px 20px #878787;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+  }
+  #notifications hr {
+    padding: 0;
+    margin: 0;
+  }
+  .notification {
+    color: black;
+    padding: 10px 15px;
+    margin: 0;
+  }
+  .notification p {
+    color: #787878;
+    font-size: 0.9em;
+  }
+  .notification:hover {
+    background-color: #eee;
+  }
+  .notifications-header a {
+    display: block;
+    margin: 0;
+    padding: 10px;
+    text-align: left;
+    text-decoration: none;
+    background-color: #d9e7d9;
+  }
+  .show-notifications a {
+    display: block;
+    margin: 0;
+    padding: 20px 15px;
+    background-color: #eee;
+    text-align: center;
+  }
+</style>
+
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
@@ -13,10 +55,7 @@
       <ul class="nav navbar-nav">
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell"></i></span></a>
-          <ul class="dropdown-menu" id="notifications" style="padding: 0; width: 650px;">
-            <li><a href="#">Notification 1</a></li>
-            <li><a href="#">Notification 2</a></li>
-            <li><a href="#">Notification 3</a></li>
+          <ul class="dropdown-menu" id="notifications">
           </ul>
         </li>
         <li><a href="{% url 'list_boutique' %}"><i class="fa fa-shopping-bag"></i></a></li>

@@ -210,7 +210,29 @@ def latest(request):
 @ajax_required
 def notification(request):
     if request.method == 'GET':
-        notifications = request.user.profile.get_all_notifications()
+        if request.GET.get('unread'):
+            notifications = request.user.profile.get_unread_notifications()
+        else:
+            notifications = request.user.profile.get_all_notifications()
+
+        if request.GET.get('ajax'):
+            return render(request, 'messenger/includes/partial_notifications_list.html', {'notifications': notifications})
+
+        if notifications:
+            notifications = notifications[:3]
         return render(request, 'messenger/includes/notification_list.html', {'notifications': notifications})
     else:
         return HttpResponse('post notification')
+
+
+@login_required
+def notifications(request):
+    if request.method == 'GET':
+        all_notifications = request.user.profile.get_all_notifications()
+        unread_notifications = request.user.profile.get_unread_notifications()
+        context = {
+            'all': all_notifications,
+            'unread': unread_notifications
+        }
+        return render(request, 'messenger/notifications.html', context)
+    return HttpResponseBadRequest()
