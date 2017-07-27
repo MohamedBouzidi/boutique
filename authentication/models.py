@@ -66,6 +66,9 @@ class Profile(models.Model):
             return Notification.objects.filter(to_user=self.user, is_read=False)
         return None
 
+    def read_all_notifications(self):
+        notifications = Notification.objects.filter(to_user=self.user, is_read=False).update(is_read=True)
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

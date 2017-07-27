@@ -5,55 +5,19 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h3>Notifications</h3>
+                    <h3>Notifications {% if notifications %}({{ notifications.count }}){% endif %}</h3>
                     <hr>
-                    <div class="row">
-                        <div class="col-md-2">
-                            <button class="btn btn-raised btn-primary btn-sm" id="unread-notifications">{{ unread.count }} unread</button>
-                            <button class="btn btn-raised btn-primary btn-sm" id="all-notifications">
-                                {{ all.count }} notifications
-                            </button>
-                        </div>
-                        <div class="col-md-10">
-                            <div class="notifications-list">
-                                {% for notification in all %}
-                                    {% include 'messenger/includes/partial_notification.html' with notification=notification %}
-                                {% endfor %}
+                    <div class="notifications-list">
+                        {% for notification in notifications %}
+                            {% include 'messenger/includes/partial_notification.html' with notification=notification %}
+                        {% empty %}
+                            <div class="text-center">
+                                <p>No notifications.</p>
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        $(function () {
-            $('#unread-notifications').on('click', function () {
-                $.ajax({
-                    url: '/messages/notification/',
-                    type: 'GET',
-                    data: {
-                        'unread': true,
-                        'ajax': true
-                    },
-                    success: function (data) {
-                        $('.notifications-list').html(data);
-                    }
-                });
-            });
-            $('#all-notifications').on('click', function () {
-                $.ajax({
-                    url: '/messages/notification/',
-                    type: 'GET',
-                    data: {
-                        'ajax': true
-                    },
-                    success: function (data) {
-                        $('.notifications-list').html(data);
-                    }
-                });
-            })
-        });
-    </script>
 {% endblock %}

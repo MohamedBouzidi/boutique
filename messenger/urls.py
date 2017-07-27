@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^delete/$', views.delete, name='delete_message'),
     url(r'^users/$', views.users, name='users_message'),
     url(r'^check/$', views.check, name='check_message'),
+    url(r'^notification/count/$', views.notification_count, name='notification_count'),
     url(r'^notification/$', views.notification, name='notification'),
     url(r'^notifications/$', views.notifications, name='notifications'),
     url(r'^latest/$', views.latest, name='latest_message'),

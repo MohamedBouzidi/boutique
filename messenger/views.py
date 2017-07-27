@@ -233,9 +233,6 @@ def notification(request):
         else:
             notifications = request.user.profile.get_all_notifications()
 
-        if request.GET.get('ajax'):
-            return render(request, 'messenger/includes/partial_notifications_list.html', {'notifications': notifications})
-
         if notifications:
             notifications = notifications[:3]
         return render(request, 'messenger/includes/notification_list.html', {'notifications': notifications})
@@ -244,13 +241,20 @@ def notification(request):
 
 
 @login_required
-def notifications(request):
+@ajax_required
+def notification_count(request):
     if request.method == 'GET':
-        all_notifications = request.user.profile.get_all_notifications()
-        unread_notifications = request.user.profile.get_unread_notifications()
-        context = {
-            'all': all_notifications,
-            'unread': unread_notifications
-        }
-        return render(request, 'messenger/notifications.html', context)
-    return HttpResponseBadRequest()
+        data = request.user.profile.get_unread_notifications()
+        print(data)
+        if data:
+            return HttpResponse(json.dumps(data.count()), content_type='application/json')
+        return HttpResponse()
+    else:
+        request.user.profile.read_all_notifications()
+        return HttpResponse(json.dumps(0), content_type='application/json')
+
+
+@login_required
+def notifications(request):
+    return render(request, 'messenger/notifications.html', 
+        {'notifications': request.user.profile.get_all_notifications()})
