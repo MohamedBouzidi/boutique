@@ -8,7 +8,7 @@ $(function () {
         $("#notifications").html(data);
       },
       complete: function () {
-        window.setTimeout(check_notification, 60000);
+        window.setTimeout(check_notification, 1000);
       }
     });
   };
@@ -27,7 +27,7 @@ $(function () {
           $(".notification-badge").hide();
       },
       complete: function () {
-        window.setTimeout(check_notification_count, 60000);
+        window.setTimeout(check_notification_count, 1000);
       }
     });
   };

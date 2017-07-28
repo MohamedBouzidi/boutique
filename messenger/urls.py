@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^notifications/$', views.notifications, name='notifications'),
     url(r'^latest/$', views.latest, name='latest_message'),
     url(r'^ajax/$', views.messages_ajax, name='messages_ajax'),
+    url(r'^(?P<user_id>\d+)/ajax/$', views.user_messages, name='user_messages'),
     url(r'^(?P<username>[^/]+)/$', views.messages, name='messages'),
     url(r'^$', views.inbox, name='inbox'),
 ]

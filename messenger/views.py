@@ -17,6 +17,25 @@ from shop.models import Product
 def get_products(user_id):
     return Product.objects.filter(boutique__owner__user__pk=user_id)[:3] or Product.objects.all()[:3]
 
+def get_messages(from_user, to_user, last=0, count=5):
+    if isinstance(to_user, User):
+        messages =  Message.objects.filter(user=from_user, conversation=to_user)
+    else:
+        messages =  Message.objects.filter(user=from_user, conversation__id=to_user)
+
+    messages_count = messages.count()
+
+    last = messages_count - last
+
+    if last <= 0:
+        return None
+    elif 0 <= last <= count:
+        return messages[:last]
+
+    print('last is ', last, ' | count is ', messages_count)
+
+    return messages[last-count:last]
+
 @login_required
 def inbox(request):
     conversations = Message.get_conversations(user=request.user)
@@ -27,9 +46,10 @@ def inbox(request):
         conversation = conversations[0]
         active_conversation = conversation['user'].username
         active_id = conversation['user'].id
-        messages = Message.objects.filter(user=request.user,
-                                          conversation=conversation['user'])
-        messages.update(is_read=True)
+        messages = get_messages(request.user, conversation['user'])
+        for message in messages:
+            message.is_read = True
+            message.save()
         for conversation in conversations:
             if conversation['user'].username == active_conversation:
                 conversation['unread'] = 0
@@ -49,8 +69,7 @@ def messages(request, username):
     active_conversation = username
     active_id = User.objects.get(username=username).id
 
-    messages = Message.objects.filter(user=request.user,
-                                      conversation__username=username)
+    messages = get_messages(request.user, active_id)
 
     context = {
         'username': username,
@@ -61,7 +80,9 @@ def messages(request, username):
     if request.method == 'GET' and not messages:
         return render(request, 'messenger/new.html', context)
 
-    messages.update(is_read=True)
+    for message in messages:
+        message.is_read = True
+        message.save()
     for conversation in conversations:
         if conversation['user'].username == username:
             conversation['unread'] = 0
@@ -82,7 +103,7 @@ def messages_ajax(request):
         messages = None
         if not not user_id:
             conversation = User.objects.get(pk=user_id)
-            messages = Message.objects.filter(user=request.user, conversation=conversation)
+            messages = get_messages(request.user, conversation)
             context = {
                 'activeId': user_id,
                 'active': conversation.username,
@@ -199,6 +220,18 @@ def users(request):
             dump.append(user.username)
     data = json.dumps(dump)
     return HttpResponse(data, content_type='application/json')
+
+
+@login_required
+@ajax_required
+def user_messages(request, user_id):
+    if request.method == 'GET':
+        last = int(request.GET.get('last'))
+        count = int(request.GET.get('count'))
+        messages = get_messages(from_user=request.user, to_user=user_id, last=last, count=count)
+        return render(request, 'messenger/includes/partial_messages_list.html', {'messages': messages})
+    else:
+        return HttpResponse()
 
 
 @login_required

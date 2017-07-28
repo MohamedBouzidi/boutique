@@ -74,7 +74,33 @@
         $('#attach').on('change', function () {
           readURL(this);
         });
-        $("#conversation").scrollTop(document.getElementById('conversation').scrollHeight);
+
+        var scrollHeight = document.getElementById('conversation').scrollHeight;
+        var moreMessages = true;
+
+        $("#conversation").scrollTop(scrollHeight);
+        
+        $("#conversation").bind("scroll", function () {
+          if ($(this).scrollTop() == 0 && moreMessages) {
+            var userId = $('#conversation_user').val();
+            var last = $(this).children().length;
+            console.log(last);
+            $.ajax({
+              url: '/messages/' + userId + '/ajax/',
+              type: 'GET',
+              data: {
+                'last': last,
+                'count': 5
+              },
+              success: function (data) {
+                if (data)
+                  $('#conversation').prepend(data);
+                else
+                  moreMessages = false;
+              }
+            });
+          }
+        });
       });
     </script>
 
